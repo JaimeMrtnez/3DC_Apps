@@ -1,0 +1,60 @@
+<!--
+Jaime Martínez Mejías. 2015.
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Random Shape with javascript and paper.js</title>
+        <style type="text/css">
+            #myCanvas{position: absolute; width: 100%; height: 100%;}
+            #instructions{background-color: grey; color:white; padding: 20px; font-family: sans-serif; line-height: 1.5em;}
+        </style>
+        <script type="text/javascript" src="js/paper-full.js"></script>
+        <script type="text/paperscript" canvas="myCanvas">
+            
+            //Shape limits options:
+            var minPoints= 3;
+            var maxPoints= 10;
+            var minRad= window.innerWidth/5;
+            var maxRad= window.innerWidth/2;
+            
+            function drawPath() {
+            //Sets random values considering defined limits
+	           var deltaRad = maxRad - minRad;
+	           var deltaPoints = maxPoints - minPoints;
+               var rad = minRad + Math.random() * deltaRad;
+               var points = minPoints + Math.floor(Math.random() * deltaPoints);
+            //Creates path using auxilliar function below
+               var path = setPoints(view.size/2, rad, points);
+            //Color options
+               path.fillColor = 'lightgrey';
+               path.strokeColor = 'black';
+            }
+            //Creates random points considering defined limits
+            function setPoints(center, maxRad, points) {
+                var path= new Path();
+                path.closed= true;
+                for (var i= 0; i<points; i++) {
+                    var delta = new Point({
+                        length: (maxRad * 0.5) + (Math.random() * maxRad * 0.5),
+                        angle: (360 / points) * i
+                    });
+                console.log(delta);
+                path.add(center + delta);
+                }
+                var draw= Math.random();
+                if (draw<0.5){path.smooth();}
+                return path;
+            }
+            
+            drawPath();
+        
+        </script>
+    </head>
+    <body>
+        <p id="instructions">Refresh browser window for a new Shape.<br>Open javascript console for information about the points that define the shape.</p>
+        <canvas id="myCanvas" resize>Your browswer doesn't support canvas</canvas>
+    </body>
+</html>
