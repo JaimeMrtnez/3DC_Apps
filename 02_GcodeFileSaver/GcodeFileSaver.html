@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"></meta>
+        <title>Saving .gcode file</title>
+        <link rel="stylesheet" type="text/css" href="GcodeFileSaver.css"></link>
+        <script type="text/javascript" src="js/FileSaver.js"></script>
+        <script type="text/javascript" src="js/Blob.js"></script>
+        <script type="text/javascript" src="js/GcodeFileSaver.js"></script>
+    </head>
+    <body>
+        <header>Saving .gcode file</header>
+        <section id="savingText">
+            <textarea class="input" id="textBox" cols="50" rows="10">
+G28
+G92 E0
+G1 Z50 F3000
+G1 X100
+G1 Y100
+G1 X0
+G28
+M84
+            </textarea>
+	        <form id="text-options">
+                <label>
+                    Filename: <input type="text" class="filename" id="textFilename" value="gcode_demo"></input>.gcode
+                </label>
+                <input type="button" value="Save" onclick="saveFile()"></input>
+	        </form>
+        </section>
+
+    </body>
+</html>

@@ -1,0 +1,29 @@
+html{
+    font-family: sans-serif;
+}
+header{
+    background-color: darkgrey;
+    color: white;
+    font-size: 1.3em;
+    padding: 10px;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+textarea{
+    margin: 0 auto;
+    margin: 10px 10px 10px 0px;
+}
+label{
+    font-size: 0.8em;
+}
+#savingText{
+    padding: 10px;
+    background-color: lightgray;
+    border-color: darkgrey;
+    border-width: 5px;
+    border-radius: 10px;
+}
+.filename{
+    margin: 0 5px 0 5px;
+    min-width: 150px;
+}
