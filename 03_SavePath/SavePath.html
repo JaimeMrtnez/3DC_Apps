@@ -1,0 +1,31 @@
+<!--
+Jaime Martínez Mejías. 2015.
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Random Shape and SavingPath working together</title>
+        <link rel="stylesheet" type="text/css" href="SavePath.css"/>
+        <script type="text/javascript" src="js/paper-full.js"></script>
+        <script type="text/javascript" src="js/Blob.js"></script>
+        <script type="text/javascript" src="js/FileSaver.js"></script>
+        <script type="text/javascript" src="js/SavePath.js"></script>
+        <script type="text/paperscript" src="js/SavePath.js" canvas="myCanvas"></script>
+        
+    </head>
+    <body>
+        <p id="instructions">Refresh browser window for a new Shape.<br>Open javascript console for information about the points that define the shape.</p>
+            <canvas id="myCanvas" height="600px" width="600px">Your browswer doesn't support canvas</canvas>
+        <div id="points">
+            <div id="options">
+            <input type="text" value="filename" id="textFilename">.gcode </input>
+            <input type="button" value="Save" onclick="saveFile()"></input>
+            </div>
+        </div>
+        
+        <div id="txtPoints"></div>
+        
+    </body>
+</html>
