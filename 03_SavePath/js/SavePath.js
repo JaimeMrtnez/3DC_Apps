@@ -54,9 +54,9 @@ function setPoints(center, maxRad, points) {
     par2.appendChild(plain_txt);
     document.getElementById("txtPoints").appendChild(par2);
     }
-    //Randomly raffles if path is smoothed
-    var draw= Math.random();
-    if (draw<0.5){path.smooth();}
+    //Randomly raffles if path is smoothed. Uncomment for random shape smoothing.
+    //var draw= Math.random();
+    //if (draw<0.5){path.smooth();}
     return path;
     
 }
