@@ -132,7 +132,7 @@ function saveFile(){
     pointsArray= offsetAndScale(pointsArray);
     
     //Rebuilding text node content for the printer.
-    text= "G28\r\nX" + pointsArray[0] +" Y" + pointsArray[1] + " Z0 F3000\r\n";
+    text= "G28\r\nG1 X" + pointsArray[0] +" Y" + pointsArray[1] + " Z0 F3000\r\n";
     for(i=2; i< pointsArray.length; i= i+2){
         text= text + "G1 X" + pointsArray[i] +" Y"+ pointsArray[i+1] + "\r\n";
     }
