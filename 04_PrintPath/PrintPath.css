@@ -1,0 +1,32 @@
+body {
+    margin: 0 auto;
+}
+#myCanvas {
+    
+
+}
+header {
+    background-color: grey; 
+    color:white; 
+    padding: 20px; 
+    font-family: sans-serif; 
+    line-height: 1.5em;
+}
+
+
+#txtPoints {
+    display: none;
+}
+a{
+    position: relative;
+    bottom: 20px;
+    float: right;
+    padding: 10px;
+    margin-bottom: 30px;
+    text-decoration: none;
+    color: black;
+    background-color: lightsteelblue;
+}
+#saveField {
+    margin-top: 20px;
+}
