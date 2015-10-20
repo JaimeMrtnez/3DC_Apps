@@ -14,7 +14,7 @@ header{
     margin: auto;
     padding: 20px;
 }
-#randomShape, #gcodeFileSaver, #savePath {
+a {
     display: block;
     margin: 10px;
     padding: 10px;
