@@ -136,6 +136,7 @@ function saveFile(){
     for(i=2; i< pointsArray.length; i= i+2){
         text= text + "G1 X" + pointsArray[i] +" Y"+ pointsArray[i+1] + "\r\n";
     }
+    text= text + "G1 X" + pointsArray[0] +" Y" +pointsArray[1] + "\r\n";
     text= text + "G28\r\nM84\r\n";
     //Creating text node
     var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
