@@ -1,3 +1,17 @@
+var W_w= window.innerWidth;
+var W_h= window.innerHeight;
+var lowerSize= Math.min(W_w, W_h);
+var myCanvas= document.getElementById("myCanvas");
+myCanvas.setAttribute("width", lowerSize);
+myCanvas.setAttribute("height", lowerSize-185);
+                      
+//Shape limits options:
+var minPoints= 3;
+var maxPoints= 10;
+
+var minRad= lowerSize/5;
+var maxRad= lowerSize/4;
+
 function offsetAndScale(array){
     
     var x_s= [];
@@ -53,11 +67,7 @@ function offsetAndScale(array){
 }
 
 
-//Shape limits options:
-var minPoints= 3;
-var maxPoints= 12;
-var minRad= 100;
-var maxRad= 200;
+
             
 function drawPath() {
 
@@ -68,7 +78,7 @@ function drawPath() {
     var points = minPoints + Math.floor(Math.random() * deltaPoints);
     
     //Creates path using setPoints() function
-    var path = setPoints(view.size / 2, rad, points);
+    var path = setPoints(view.size, rad, points);
     
     //Random RGB channels values
     var r= Math.random();
@@ -76,7 +86,8 @@ function drawPath() {
     var b= Math.random();
     
     //Fill path with random values.
-    path.fillColor = new Color(r,g,b);
+    path.strokeWidth = 3;
+    path.strokeColor = new Color(r,g,b);
 }
             
 function setPoints(center, maxRad, points) {
@@ -101,11 +112,10 @@ function setPoints(center, maxRad, points) {
     return path;
 }
 
-function saveFile(){
+function getAndProcessText(){
     
     //Getting values
     var text = document.getElementById("txtPoints").textContent;
-    var filename = document.getElementById("textFilename").value;
     
     /***** Formatting text for offsetAndScale() function *****/
     //Deleting unwanted characters
@@ -128,23 +138,62 @@ function saveFile(){
         pointsArray[i]= pointsArray[i].toFixed(2);
         pointsArray[i]= parseFloat(pointsArray[i]);
     }
+    
     //Recalculating points positions
     pointsArray= offsetAndScale(pointsArray);
     
-    //Rebuilding text node content for the printer.
-    text= "G28\r\nG1 X" + pointsArray[0] +" Y" + pointsArray[1] + " Z0 F3000\r\n";
-    for(i=2; i< pointsArray.length; i= i+2){
-        text= text + "G1 X" + pointsArray[i] +" Y"+ pointsArray[i+1] + "\r\n";
+    //Calculating distances between points
+    var distance= [];
+    for (i=0, j=0; i< pointsArray.length; i= i+2, j++){
+        distance[j]= Math.sqrt(Math.pow((pointsArray[i+2]-pointsArray[i]), 2) + 
+                     Math.pow((pointsArray[i+3]-pointsArray[i+1]), 2));
     }
-    text= text + "G1 X" + pointsArray[0] +" Y" +pointsArray[1] + "\r\n";
+    //Deleting last segment NaN value
+    distance.splice(distance.length-1, 1);
+    
+    //Calculating last segment distance
+    var closingDistance= Math.sqrt(Math.pow((pointsArray[pointsArray.length-2]-pointsArray[0]),2) + 
+                                   Math.pow((pointsArray[pointsArray.length-1]-pointsArray[1]),2));
+
+    //Adding segment to the array
+    distance.push(closingDistance);
+   
+    //Calculating surfaces and ratio between them
+    var nozzle_d= parseFloat(document.getElementById("nozzle_d").value);
+    var material_d= parseFloat(document.getElementById("material_d").value);
+    var nozzle_s= Math.PI * Math.pow((nozzle_d/2), 2);
+    var material_s= Math.PI * Math.pow((material_d/2), 2);
+    var m_s_ratio= nozzle_s / material_s;
+    
+    //Calculating extrusion values
+    var extrusion= [];
+    for (i=0; i< distance.length; i++){
+        extrusion[i]= m_s_ratio * distance[i];
+        extrusion[i]= extrusion[i].toFixed(2);
+        extrusion[i]= parseFloat(extrusion[i]);
+    }
+    
+    /*** Rebuilding text node content for the printer ***/
+    
+    text= "G28\r\nG1 X" + pointsArray[0] +" Y" + pointsArray[1] + " Z0 F3000\r\n";
+    for(i=2, j=0; i< pointsArray.length; i= i+2, j++){
+        text= text + "G1 X" + pointsArray[i] +" Y"+ pointsArray[i+1] + " E" +extrusion[j]+"\r\n";
+    }
+    text= text + "G1 X" + pointsArray[0] +" Y" +pointsArray[1] + " E" +extrusion[0]+ "\r\n";
     text= text + "G28\r\nM84\r\n";
+    
+    return text;
+}
+
+function saveFile(){
+    
+    var text= getAndProcessText();
+    var filename = document.getElementById("textFilename").value;
     //Creating text node
     var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
     //Saving file
     saveAs(blob, filename+".gcode");
 } 
-
-
 
 drawPath();
             
