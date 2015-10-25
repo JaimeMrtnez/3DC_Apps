@@ -5,7 +5,7 @@ body {
     
 
 }
-header {
+header, footer {
     background-color: grey; 
     color:white; 
     padding: 20px; 
@@ -19,7 +19,7 @@ header {
 }
 a{
     position: relative;
-    bottom: 20px;
+    bottom: 0;
     float: right;
     padding: 10px;
     margin-bottom: 30px;
@@ -28,5 +28,5 @@ a{
     background-color: lightsteelblue;
 }
 #saveField {
-    margin-top: 20px;
+    margin-top: 10px;
 }
