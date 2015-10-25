@@ -17,16 +17,23 @@ Jaime Martínez Mejías. 2015.
     </head>
     <body>
         <header>
-            Refresh browser window for a new Shape.<br>
+            
             <a href="../index.html">Index</a>
+            <div id="diameters">
+                Material diameter: <input type="text" id="material_d" value="40.5" ></input><br>
+                Nozzle diameter: <input type="text" id="nozzle_d" value="1.5" ></input><br>
+            </div>
+            
+        </header>
+        
+            <canvas id="myCanvas">Your browswer doesn't support canvas</canvas>
+        <footer>
             <div id="saveField">
-                Click "Save" to get a G-code document for the printer.<br>
+                Click "Save" to get a G-code file for the printer.<br>
                 <input type="text" value="filename" id="textFilename">.gcode </input>
                 <input type="button" value="Save" onclick="saveFile()"></input>
             </div>
-        </header>
-        
-            <canvas id="myCanvas" height="600px" width="600px">Your browswer doesn't support canvas</canvas>
+        </footer>
       
         <div id="txtPoints">
         </div>
