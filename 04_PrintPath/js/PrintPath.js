@@ -209,7 +209,8 @@ function saveFile(){
 /*** Function calls ***/
 //Building Shape
 drawPath();
-//Processing text node
+
+//Processing text node to display it by screen
 var formatted_text= getAndProcessText();
 formatted_text= formatted_text.replace(/G/g,"<br>G");
 formatted_text= formatted_text.replace(/<br>/,"");
