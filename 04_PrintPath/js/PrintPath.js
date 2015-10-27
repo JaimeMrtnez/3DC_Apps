@@ -214,5 +214,6 @@ drawPath();
 //Processing text node to display it by screen
 var formatted_text= getAndProcessText();
 formatted_text= formatted_text.replace(/G/g,"<br>G");
+formatted_text= formatted_text.replace(/M/g,"<br>M");
 formatted_text= formatted_text.replace(/<br>/,"");
 document.getElementById("gcode").innerHTML= formatted_text;
