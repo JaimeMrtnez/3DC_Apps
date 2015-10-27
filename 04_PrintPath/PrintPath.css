@@ -1,32 +1,110 @@
-body {
-    margin: 0 auto;
+html {
+
 }
-#myCanvas {
+
+body {
+    max-width: 1000px;
+    margin: 0 auto;
+    
     
 
 }
-header, footer {
-    background-color: grey; 
-    color:white; 
-    padding: 20px; 
-    font-family: sans-serif; 
-    line-height: 1.5em;
+header{
+    height: 50px;
+    max-width: inherit;
+    background-image: url(images/header_backg.png);
+    opacity: 0.7;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+main{
+    font-family: sans-serif;
+    font-size: 14px;
+    height: 960px;
+    background-color: #eeeeee;
+    margin-bottom: 10px;
+    padding: 10px;
+    
+}
+footer {
+    padding: 20px;
+    height: 20px;
+    max-width: 1000px;
+    background-image: url(images/footer_backg.png);
+    opacity: 0.7;
+}
+a{
+    position: relative;
+    float: right;
+    top: 10px;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: white;
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: black;
+}
+a:hover {
+    background-color: lightblue;
+    padding: 11px;
+    font-weight: 600;
+    font-size: 1em;
+    box-shadow: 3px 3px 3px #333333;
+}
+#logo {
+    font-family: 'Oswald', cursive;
+    font-size: 2.5em;
+    letter-spacing: 1px;
+    float: left;
+    color: black;
 }
 
+#myCanvas {
+    background-color: white;
+    float: left;
+    border: 1px solid black;
+}
+#inputs_wrapper {
+    float: left;
+    margin-left: 20px;
+        
+}
+#inputs_wrapper > div {
+    margin-top: 20px;
+    text-align: right;
+}
+#inputs_wrapper > div > input {
+    margin-top: 10px;
+}
+#saveButton {
+    padding: 10px;
+    margin-top: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: white;
+    font-family: sans-serif;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: black;
+}
+#saveButton:hover {
+    background-color: lightblue;
+    padding: 11px;
+    font-weight: 600;
+    font-size: 1em;
+    box-shadow: 3px 3px 3px #333333;
+}
 
 #txtPoints {
     display: none;
 }
-a{
+#gcode {
     position: relative;
-    bottom: 0;
-    float: right;
+    float: left;
+    margin-left: 20px;
     padding: 10px;
-    margin-bottom: 30px;
-    text-decoration: none;
-    color: black;
-    background-color: lightsteelblue;
+  
 }
-#saveField {
-    margin-top: 10px;
-}
+
