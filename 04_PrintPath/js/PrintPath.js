@@ -1,16 +1,9 @@
-var W_w= window.innerWidth;
-var W_h= window.innerHeight;
-var lowerSize= Math.min(W_w, W_h);
-var myCanvas= document.getElementById("myCanvas");
-myCanvas.setAttribute("width", lowerSize);
-myCanvas.setAttribute("height", lowerSize-185);
-                      
+                  
 //Shape limits options:
 var minPoints= 3;
-var maxPoints= 10;
-
-var minRad= lowerSize/5;
-var maxRad= lowerSize/4;
+var maxPoints= 12;
+var minRad= 200;
+var maxRad= 300;
 
 function offsetAndScale(array){
     
@@ -66,9 +59,7 @@ function offsetAndScale(array){
     return coords;
 }
 
-
-
-            
+         
 function drawPath() {
 
     //Sets random values considering defined limits
@@ -86,7 +77,7 @@ function drawPath() {
     var b= Math.random();
     
     //Fill path with random values.
-    path.strokeWidth = 3;
+    path.strokeWidth = 6;
     path.strokeColor = new Color(r,g,b);
 }
             
@@ -100,7 +91,7 @@ function setPoints(center, maxRad, points) {
             length: (maxRad * 0.5) + (Math.random() * maxRad * 0.5),
             angle: (360 / points) * i
         });
-    path.add(center + delta);
+    path.add(center/2 + delta);
     
     //Creates some hidden text nodes to be trated by saveFile() fuction    
     var par2= document.createElement("P");
@@ -114,7 +105,7 @@ function setPoints(center, maxRad, points) {
 
 function getAndProcessText(){
     
-    //Getting values
+    //Getting text node
     var text = document.getElementById("txtPoints").textContent;
     
     /***** Formatting text for offsetAndScale() function *****/
@@ -135,7 +126,7 @@ function getAndProcessText(){
     //Rounding to 2 decimals
     for(i=0; i< pointsArray.length; i++){
         pointsArray[i]= parseFloat(pointsArray[i]);
-        pointsArray[i]= pointsArray[i].toFixed(2);
+        pointsArray[i]= pointsArray[i].toFixed(4);
         pointsArray[i]= parseFloat(pointsArray[i]);
     }
     
@@ -158,29 +149,49 @@ function getAndProcessText(){
     //Adding segment to the array
     distance.push(closingDistance);
    
-    //Calculating surfaces and ratio between them
+    /*** Calculating printing values ***/
+    //Getting values
     var nozzle_d= parseFloat(document.getElementById("nozzle_d").value);
     var material_d= parseFloat(document.getElementById("material_d").value);
+    var feedrate= document.getElementById("feedrate").value;
+    var b_pressure= parseFloat(document.getElementById("b_pressure").value);
+    var r_pressure;
+    
+    //Calculating nozzle-material surface ratio
     var nozzle_s= Math.PI * Math.pow((nozzle_d/2), 2);
     var material_s= Math.PI * Math.pow((material_d/2), 2);
     var m_s_ratio= nozzle_s / material_s;
     
-    //Calculating extrusion values
+    //Calculating extrusion values of each segment
     var extrusion= [];
     for (i=0; i< distance.length; i++){
         extrusion[i]= m_s_ratio * distance[i];
-        extrusion[i]= extrusion[i].toFixed(2);
+        extrusion[i]= extrusion[i].toFixed(4);
         extrusion[i]= parseFloat(extrusion[i]);
     }
     
-    /*** Rebuilding text node content for the printer ***/
-    
-    text= "G28\r\nG1 X" + pointsArray[0] +" Y" + pointsArray[1] + " Z0 F3000\r\n";
-    for(i=2, j=0; i< pointsArray.length; i= i+2, j++){
-        text= text + "G1 X" + pointsArray[i] +" Y"+ pointsArray[i+1] + " E" +extrusion[j]+"\r\n";
+    //Calculating accumulated extrusion values
+    var ac_extrusion= [];
+    ac_extrusion[0]= extrusion[0];
+    for(i=1; i< extrusion.length; i++){
+        ac_extrusion[i]= ac_extrusion[i-1] + extrusion[i];
+        ac_extrusion[i]= ac_extrusion[i].toFixed(4);
+        ac_extrusion[i]= parseFloat(ac_extrusion[i]);
     }
-    text= text + "G1 X" + pointsArray[0] +" Y" +pointsArray[1] + " E" +extrusion[0]+ "\r\n";
-    text= text + "G28\r\nM84\r\n";
+    //Calculating release pressure
+    r_pressure= ac_extrusion[ac_extrusion.length-1] - b_pressure;
+    
+    /*** Rebuilding text node content for the printer ***/
+    text= "G28\r\nG92 E0\r\nG1 X" + pointsArray[0] +" Y" + pointsArray[1] + 
+        " Z0 F" + feedrate + "\r\nG1 E" + b_pressure + " F200\r\nG92 E0\r\nG1 F" 
+        + feedrate + "\r\n";
+    for(i=2, j=0; i< pointsArray.length; i= i+2, j++){
+        text= text + "G1 X" + pointsArray[i] +" Y"+ pointsArray[i+1] + 
+            " E" +ac_extrusion[j]+"\r\n";
+    }
+    text= text + "G1 X" + pointsArray[0] +" Y" +pointsArray[1] + 
+        " E" +ac_extrusion[ac_extrusion.length-1]+ "\r\n";
+    text= text + "G1 E" + r_pressure + " F200\r\n\G1 F" + feedrate+ "\r\nG28\r\nM84\r\n";
     
     return text;
 }
@@ -193,7 +204,13 @@ function saveFile(){
     var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
     //Saving file
     saveAs(blob, filename+".gcode");
-} 
+}
 
+/*** Function calls ***/
+//Building Shape
 drawPath();
-            
+//Processing text node
+var formatted_text= getAndProcessText();
+formatted_text= formatted_text.replace(/G/g,"<br>G");
+formatted_text= formatted_text.replace(/<br>/,"");
+document.getElementById("gcode").innerHTML= formatted_text;
