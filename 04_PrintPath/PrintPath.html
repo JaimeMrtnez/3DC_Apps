@@ -8,6 +8,7 @@ Jaime Martínez Mejías. 2015.
         <meta charset="utf-8"/>
         <title>Path ready for print</title>
         <link rel="stylesheet" type="text/css" href="PrintPath.css"/>
+        <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
         <script type="text/javascript" src="js/paper-full.js"></script>
         <script type="text/javascript" src="js/Blob.js"></script>
         <script type="text/javascript" src="js/FileSaver.js"></script>
@@ -17,22 +18,28 @@ Jaime Martínez Mejías. 2015.
     </head>
     <body>
         <header>
-            
-            <a href="../index.html">Index</a>
-            <div id="diameters">
-                Material diameter: <input type="text" id="material_d" value="40.5" ></input><br>
-                Nozzle diameter: <input type="text" id="nozzle_d" value="1.5" ></input><br>
-            </div>
-            
+            <div id="logo">3DFP Random Shape</div>
+            <a href="../index.html">INDEX</a>  
         </header>
-        
-            <canvas id="myCanvas">Your browswer doesn't support canvas</canvas>
-        <footer>
-            <div id="saveField">
-                Click "Save" to get a G-code file for the printer.<br>
-                <input type="text" value="filename" id="textFilename">.gcode </input>
-                <input type="button" value="Save" onclick="saveFile()"></input>
+        <main>
+            <canvas id="myCanvas" width="600 px" height="600 px">Your browswer doesn't support canvas</canvas>
+            <div id= "inputs_wrapper">
+                <div id="settings">
+                    Material diameter: <input type="text" id="material_d" value="40.5" ></input><br>
+                    Nozzle diameter: <input type="text" id="nozzle_d" value="1.5" ></input><br>
+                    Feedrate: <input type="text" id="feedrate" value="3000" ></input><br>
+                    Build up pressure: <input type="text" id="b_pressure" value="2.5" ></input><br>
+                </div>
+                <div id="saveField">
+                    Click "Save" to get a G-code file for the printer.<br>
+                    <input type="text" value="filename" id="textFilename">.gcode </input><br>
+                    <input type="button" id="saveButton" value="SAVE" onclick="saveFile()"></input>
+                </div>
             </div>
+            <div id="gcode"></div>
+        </main>
+        <footer>
+           footer
         </footer>
       
         <div id="txtPoints">
