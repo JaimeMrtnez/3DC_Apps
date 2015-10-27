@@ -180,6 +180,7 @@ function getAndProcessText(){
     }
     //Calculating release pressure
     r_pressure= ac_extrusion[ac_extrusion.length-1] - r_pressure;
+    r_pressure= r_pressure.toFixed(4);
     
     /*** Rebuilding text node content for the printer ***/
     text= "G28\r\nG92 E0\r\nG1 X" + pointsArray[0] +" Y" + pointsArray[1] + 
