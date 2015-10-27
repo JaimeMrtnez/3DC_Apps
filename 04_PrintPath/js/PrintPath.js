@@ -155,7 +155,7 @@ function getAndProcessText(){
     var material_d= parseFloat(document.getElementById("material_d").value);
     var feedrate= document.getElementById("feedrate").value;
     var b_pressure= parseFloat(document.getElementById("b_pressure").value);
-    var r_pressure;
+    var r_pressure= parseFloat(document.getElementById("r_pressure").value);
     
     //Calculating nozzle-material surface ratio
     var nozzle_s= Math.PI * Math.pow((nozzle_d/2), 2);
@@ -179,7 +179,7 @@ function getAndProcessText(){
         ac_extrusion[i]= parseFloat(ac_extrusion[i]);
     }
     //Calculating release pressure
-    r_pressure= ac_extrusion[ac_extrusion.length-1] - b_pressure;
+    r_pressure= ac_extrusion[ac_extrusion.length-1] - r_pressure;
     
     /*** Rebuilding text node content for the printer ***/
     text= "G28\r\nG92 E0\r\nG1 X" + pointsArray[0] +" Y" + pointsArray[1] + 
