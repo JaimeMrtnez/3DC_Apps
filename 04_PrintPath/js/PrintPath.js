@@ -1,4 +1,7 @@
-                  
+/*** Generates a random shape and its corresponding 3D printer g-code
+**** Jaime Martínez for 3DigitalCooks.com 
+**** Open Source Tool ***/
+
 //Shape limits options:
 var minPoints= 3;
 var maxPoints= 12;
@@ -7,6 +10,7 @@ var maxRad= 300;
 
 function offsetAndScale(array){
     
+    //Generating Arrays to store points coordinates
     var x_s= [];
     var y_s= [];
     var coords= [];
@@ -18,14 +22,17 @@ function offsetAndScale(array){
     for(i=1; i< array.length; i= i+2){
         y_s.push(array[i]);
     }
+    
     //Finding maximum and minimum values.
     var xMax= Math.max.apply(Math, x_s);
     var xMin= Math.min.apply(Math, x_s);
     var yMax= Math.max.apply(Math, y_s);
     var yMin= Math.min.apply(Math, y_s);
+    
     //Calculating Offset
     var xOffset= xMin + ((xMax - yMin)/2);
     var yOffset= yMin + ((yMax - yMin)/2);
+    
     //Calculating scale parameters
     var xDiff= xMax - xMin;
     var yDiff= yMax - yMin;
@@ -40,6 +47,7 @@ function offsetAndScale(array){
     for(i= 0; i< x_s.length; i++){
         x_s[i]= x_s[i] * xScale;
     }
+    
     //Converting y's
     for(i= 0; i< y_s.length; i++){
         y_s[i]= y_s[i] - yOffset;
@@ -47,11 +55,13 @@ function offsetAndScale(array){
     for(i= 0; i< y_s.length; i++){
         y_s[i]= y_s[i] * yScale;
     }
+    
     //Rebuilding array with new values
     for(i=0; i< (x_s.length) ; i++){
         coords.push(x_s[i]);
         coords.push(y_s[i]);
     }
+    
     //Rounding and parsing numbers
     for (i=0; i< coords.length;i++){
         coords[i]= coords[i].toFixed(2);
@@ -76,14 +86,14 @@ function drawPath() {
     var g= Math.random();
     var b= Math.random();
     
-    //Fill path with random values.
+    //Sets path with RGB random values.
     path.strokeWidth = 6;
     path.strokeColor = new Color(r,g,b);
 }
             
 function setPoints(center, maxRad, points) {
     
-    //Creates a Point object to be used by drawPath() function
+    //Creates a Path object to be used by drawPath() function
     var path= new Path();
     path.closed= true;
     for (var i= 0; i< points; i++) {
@@ -103,6 +113,13 @@ function setPoints(center, maxRad, points) {
     return path;
 }
 
+//Needs revision, it doesn't work correctly in some cases :(
+function roundFloat(floatNum){
+    floatNum= floatNum.toFixed(4);
+    floatNum= parseFloat(floatNum);
+}
+
+
 function getAndProcessText(){
     
     //Getting text node
@@ -111,20 +128,26 @@ function getAndProcessText(){
     /***** Formatting text for offsetAndScale() function *****/
     //Deleting unwanted characters
     text= text.replace(/{|:|x|y/g,"");
+    
     //Adding commas between points
     text= text.replace(/}/g,",");
+    
     //Deleting whitespaces
     text= text.replace(/\s/g,"");
+    
     //Changing commas by spaces
     text= text.replace(/,/g," ");
+    
     //Deleting first and last space
     text= text.trim();
+   
     //Coverting text into an Array of points
     var pointsArray= text.split(" ");
     
     /***** Treating the Array *****/
-    //Rounding to 2 decimals
-    for(i=0; i< pointsArray.length; i++){
+    
+    //Rounding to 4 decimals
+    for (i= 0; i< pointsArray.length; i++){
         pointsArray[i]= parseFloat(pointsArray[i]);
         pointsArray[i]= pointsArray[i].toFixed(4);
         pointsArray[i]= parseFloat(pointsArray[i]);
@@ -135,7 +158,7 @@ function getAndProcessText(){
     
     //Calculating distances between points
     var distance= [];
-    for (i=0, j=0; i< pointsArray.length; i= i+2, j++){
+    for (i= 0, j= 0; i< pointsArray.length; i= i+2, j++){
         distance[j]= Math.sqrt(Math.pow((pointsArray[i+2]-pointsArray[i]), 2) + 
                      Math.pow((pointsArray[i+3]-pointsArray[i+1]), 2));
     }
@@ -149,13 +172,22 @@ function getAndProcessText(){
     //Adding segment to the array
     distance.push(closingDistance);
    
-    /*** Calculating printing values ***/
-    //Getting values
+    /***** Calculating printing values *****/
+    
+    //Getting user values
     var nozzle_d= parseFloat(document.getElementById("nozzle_d").value);
     var material_d= parseFloat(document.getElementById("material_d").value);
     var feedrate= document.getElementById("feedrate").value;
     var b_pressure= parseFloat(document.getElementById("b_pressure").value);
     var r_pressure= parseFloat(document.getElementById("r_pressure").value);
+    
+    //Getting layers settings
+    var layers= parseInt(document.getElementById("layers").value);
+    var layer_h= parseFloat(document.getElementById("layer_h").value);
+    var i_layer_h= parseFloat(document.getElementById("i_layer_h").value);
+    
+    //Calculating total height
+    var total_height= i_layer_h + ((layers-1) * layer_h);
     
     //Calculating nozzle-material surface ratio
     var nozzle_s= Math.PI * Math.pow((nozzle_d/2), 2);
@@ -164,34 +196,106 @@ function getAndProcessText(){
     
     //Calculating extrusion values of each segment
     var extrusion= [];
-    for (i=0; i< distance.length; i++){
+    for (i= 0; i< distance.length; i++){
         extrusion[i]= m_s_ratio * distance[i];
-        extrusion[i]= extrusion[i].toFixed(4);
-        extrusion[i]= parseFloat(extrusion[i]);
+            
+            //Rounding values
+            extrusion[i]= extrusion[i].toFixed(4);
+            extrusion[i]= parseFloat(extrusion[i]);
     }
     
-    //Calculating accumulated extrusion values
+    //Storing total extrusion of each layer
+    var total_layer_extrusion= 0;
+    for (i=0; i< extrusion.length; i++){
+        total_layer_extrusion= total_layer_extrusion+ extrusion[i];     
+    }
+    
+        //Rounding values
+        total_layer_extrusion= total_layer_extrusion.toFixed(4);
+        total_layer_extrusion= parseFloat(total_layer_extrusion);
+    
+    console.log(extrusion);
+    console.log(total_layer_extrusion);
+    
+    //Calculating accumulated extrusion values of one layer
     var ac_extrusion= [];
     ac_extrusion[0]= extrusion[0];
-    for(i=1; i< extrusion.length; i++){
+    for (i= 1; i< extrusion.length; i++){
         ac_extrusion[i]= ac_extrusion[i-1] + extrusion[i];
-        ac_extrusion[i]= ac_extrusion[i].toFixed(4);
-        ac_extrusion[i]= parseFloat(ac_extrusion[i]);
+        
+            //Rounding values
+            ac_extrusion[i]= ac_extrusion[i].toFixed(4);
+            ac_extrusion[i]= parseFloat(ac_extrusion[i]);
     }
-    //Calculating release pressure
-    r_pressure= ac_extrusion[ac_extrusion.length-1] - r_pressure;
-    r_pressure= r_pressure.toFixed(4);
+    
     
     /*** Rebuilding text node content for the printer ***/
+    
+    //Initial instructions block
     text= "G28\r\nG92 E0\r\nG1 X" + pointsArray[0] +" Y" + pointsArray[1] + 
-        " Z0 F" + feedrate + "\r\nG1 E" + b_pressure + " F200\r\nG92 E0\r\nG1 F" 
+        " Z"+ i_layer_h +" F" + feedrate + "\r\nG1 E" + b_pressure + " F200\r\nG92 E0\r\nG1 F" 
         + feedrate + "\r\n";
-    for(i=2, j=0; i< pointsArray.length; i= i+2, j++){
-        text= text + "G1 X" + pointsArray[i] +" Y"+ pointsArray[i+1] + 
-            " E" +ac_extrusion[j]+"\r\n";
+    
+    
+    //Calculating accumulated layer height values
+    var ac_layer_h;
+    ac_layer_h= i_layer_h + layer_h;
+    
+    /***** Layers loop *****/
+    
+    for (k= 0; k< layers; k++){
+        
+        //Movements and extrusions
+        for(i= 2, j= 0; i< pointsArray.length; i= i+2, j++){
+            text= text + "G1 X" + pointsArray[i] +" Y"+ pointsArray[i+1] + 
+                  " E" +ac_extrusion[j]+"\r\n";
+        }
+        
+        //Adding last segment
+        var l_s_extrusion= ac_extrusion[ac_extrusion.length-1];
+        text= text + "G1 X" + pointsArray[0] +" Y" +pointsArray[1] + 
+              " E" + l_s_extrusion + "\r\n";
+        
+        //Increasing Z axis (if necessary)
+        if (ac_layer_h<= total_height){
+            text= text + "G1 Z"+ (ac_layer_h) +"\r\n";
+        }
+        ac_layer_h= ac_layer_h + layer_h;
+        
+        //Recalculating extrusion values for the next layer
+        for (x= 1; x< ac_extrusion.length; x++){
+            
+            //Setting first segment extrusion
+            ac_extrusion[0]= l_s_extrusion + extrusion[0];
+            
+                //Rounding values
+                ac_extrusion[0]= ac_extrusion[0].toFixed(4);
+                ac_extrusion[0]= parseFloat(ac_extrusion[0]);
+            
+            //Calculating remaining values
+            ac_extrusion[x]= ac_extrusion[x-1] + extrusion[x];
+            
+                //Rounding values
+                ac_extrusion[x]= ac_extrusion[x].toFixed(4);
+                ac_extrusion[x]= parseFloat(ac_extrusion[x]);
+            
+            //Resetting last extrusion
+            l_s_extrusion= ac_extrusion[ac_extrusion.length-1];
+            
+                //Rounding values
+                l_s_extrusion= l_s_extrusion.toFixed(4);
+                l_s_extrusion= parseFloat(l_s_extrusion);
+            }
+        console.log(ac_extrusion);
     }
-    text= text + "G1 X" + pointsArray[0] +" Y" +pointsArray[1] + 
-        " E" +ac_extrusion[ac_extrusion.length-1]+ "\r\n";
+    
+    
+    /*** Calculating release pressure ***/
+    l_s_extrusion= ac_extrusion[ac_extrusion.length-1]-total_layer_extrusion;
+    r_pressure= l_s_extrusion - r_pressure;
+    r_pressure= r_pressure.toFixed(4);
+    
+    //Final instructions block
     text= text + "G1 E" + r_pressure + " F200\r\n\G1 F" + feedrate+ "\r\nG28\r\nM84\r\n";
     
     return text;
@@ -208,12 +312,13 @@ function saveFile(){
 }
 
 /*** Function calls ***/
+
 //Building Shape
 drawPath();
 
-//Processing text node to display it by screen
-var formatted_text= getAndProcessText();
+//Processing text node to display it by screen (styleless, just for developement purposes)
+/*var formatted_text= getAndProcessText();
 formatted_text= formatted_text.replace(/G/g,"<br>G");
 formatted_text= formatted_text.replace(/M/g,"<br>M");
 formatted_text= formatted_text.replace(/<br>/,"");
-document.getElementById("gcode").innerHTML= formatted_text;
+document.getElementById("gcode").innerHTML= formatted_text;*/
