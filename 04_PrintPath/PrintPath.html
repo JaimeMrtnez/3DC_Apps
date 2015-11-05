@@ -28,8 +28,12 @@ Jaime Martínez Mejías. 2015.
                     Material diameter: <input type="text" id="material_d" value="40.5" ></input><br>
                     Nozzle diameter: <input type="text" id="nozzle_d" value="1.5" ></input><br>
                     Feedrate: <input type="text" id="feedrate" value="3000" ></input><br>
-                    Build up pressure: <input type="text" id="b_pressure" value="2.5" ></input><br>
+                    Initial Layer Heigth: <input type="text" id="i_layer_h" value="1.5" ></input><br>
+                    Layer Height: <input type="text" id="layer_h" value="1" ></input><br>
+                    Number of layers: <input type="text" id="layers" value="4" ></input><br>
+                    Initial build up pressure: <input type="text" id="b_pressure" value="2.5" ></input><br>
                     Release pressure: <input type="text" id="r_pressure" value="1.5" ></input><br>
+                    
                 </div>
                 <div id="saveField">
                     Click "Save" to get a G-code file for the printer.<br>
@@ -37,7 +41,7 @@ Jaime Martínez Mejías. 2015.
                     <input type="button" id="saveButton" value="SAVE" onclick="saveFile()"></input>
                 </div>
             </div>
-            <div id="gcode"></div>
+            <!--div id="gcode"></div-->
         </main>
         <footer>
            footer
