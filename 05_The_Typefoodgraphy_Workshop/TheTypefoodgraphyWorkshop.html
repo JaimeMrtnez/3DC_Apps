@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Typefoodgraphy Workshop</title>
+    <meta name="description" content="An application to generate typographic designs ready for 3D printing with food.">
+    <meta charset="utf-8">
+    <script type="text/javascript" src="js/opentype.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link rel="stylesheet" href="TheTypefoodgraphyWorkshop.css">
+    <link href='https://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <header>
+        <h1>The Typefoodgraphy Workshop</h1>
+    </header>
+    <main>
+        <div class="instructions">
+            <h2>
+                Welcome to The Typefoodgraphy Workshop!
+            </h2>
+            <p>
+                With this mini app, you can create your own type design in a quick and easy way.<br>
+                First, type in the text you want. Then try to manipulate it by changing the base font and the size, or the funniest, click on different parts of the canvas to see how it deforms and takes on a new personality.
+When you're happy with the result you can save a file ready to work with your food printer. Have a good time and Bon Appetit!
+                
+            </p>
+        </div>
+        <div class="userInputs">
+            <div>
+                <h2>1. Type your text:</h2>
+                <input type="text" id="textInput" onkeyup="" value="3DigitalCooks" autofocus id="textField">
+            </div>
+            <div>
+                <h2>2. Choose a base font:</h2>
+                <form id="fontForm">
+                    <input type="radio" name="fontName" value="font1" checked>font1
+                    <input type="radio" name="fontName" value="font2">font2
+                    <input type="radio" name="fontName" value="font3">font3
+                    <input type="radio" name="fontName" value="font4">font4
+                    <input type="radio" name="fontName" value="font5">font5
+                </form>
+            </div>
+            <h2>3. Click on different parts of the canvas to generate a new design:</h2>
+        </div>
+        <div id="message"></div>
+        <canvas id="playingField" width="1000" height="400" onclick=""></canvas>
+        <div class="userInputs">
+            <div>
+                <h2>5. Save your file:</h2>
+                <input type="button" id="settingsButton" class="button" value="Printer Settings">
+                <input type="text" value="filename">.gcode
+                <input type="button" id="saveButton" class="button" value="Save">
+            </div>
+        </div>
+    </main>
+    <footer></footer>
+</body>
+</html>

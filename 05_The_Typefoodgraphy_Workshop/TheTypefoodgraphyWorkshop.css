@@ -1,0 +1,94 @@
+body{
+    font: 12px Helvetica, arial, sans-serif;
+    min-width: 1024px;
+    margin: 0 0 50px 0;
+    padding: 0;
+}
+header{ 
+    width: 1000px;
+    background-color: darkgrey;
+    border-bottom: 3px solid #555;
+    height: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Bree Serif', cursive;
+    text-align: center;
+}
+header h1{
+    color: white;
+    line-height: 90px;
+    display: inline-block;
+    margin: 0 0 0 20px;
+    font-size: 42px;
+}
+main{
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#textInput{
+    font-size: 18px;
+    padding: 5px;
+    width: 990px;
+    display: block;
+}
+#playingField{
+    border: 1px solid #eee;
+    box-shadow: 1px 0 5px #ccc;
+    margin-bottom: 5px;
+}
+footer{
+    width: 1000px;
+    background-color: darkgrey;
+    border-bottom: 3px solid #555;
+    height: 40px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.instructions{
+    margin-bottom: 10px;
+    border-bottom: 3px solid #eee; 
+}
+.instructions p {
+    max-width: 800px;
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    /*
+    -webkit-column-count: 2; /* Chrome, Safari, Opera 
+    -moz-column-count: 2; /* Firefox 
+    column-count: 2;
+    -webkit-column-gap: 40px; /* Chrome, Safari, Opera 
+    -moz-column-gap: 40px; /* Firefox 
+    column-gap: 40px;
+    */
+}
+h2 {
+    font-size: 20px;
+    font-weight:600;
+    color: #555;
+}
+.userInputs div {
+    border-bottom: 3px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+}
+#fontSizeSlider{
+    width: 990px; 
+}
+#settingsButton {
+    margin-right: 20px;
+}
+#message {
+    position: relative;
+    top: -3px;
+    background: red;
+    color: white;
+    padding: 1px 5px;
+    font-weight: bold;
+    border-radius: 2px;
+    display: none;
+	clear: both;
+}
