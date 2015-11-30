@@ -28,7 +28,7 @@ When you're happy with the result you can save a file ready to work with your fo
         <div class="userInputs">
             <div>
                 <h2>1. Type your text:</h2>
-                <input type="text" maxlength="11" id="textInput" value="3DIGITALCOOKS" autofocus id="textField">
+                <input type="text" maxlength="11" id="textInput" value="3DIGITALCOOKS" autofocus id="textField" onkeyup="renderText()">
             </div>
             <div>
                 <h2>2. Choose a base font:</h2>
@@ -45,6 +45,10 @@ When you're happy with the result you can save a file ready to work with your fo
         <div id="message"></div>
         <canvas id="playingField" width="1000" height="300" onclick=""></canvas>
         <div class="userInputs">
+            <div>
+                <h2>4. Adjust the size</h2>
+                <input type="range" id="fontSizeSlider" name="fontSize" min="120" max="240" step="20" value="120" >
+            </div>
             <div>
                 <h2>5. Save your file:</h2>
                 <input type="button" id="settingsButton" class="button" value="Printer Settings">
