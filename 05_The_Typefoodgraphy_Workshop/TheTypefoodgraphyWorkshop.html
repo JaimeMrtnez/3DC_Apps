@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="TheTypefoodgraphyWorkshop.css">
     <link href='https://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
 </head>
-<body>
+<body onload="initialise()">
     <header>
         <h1>The Typefoodgraphy Workshop</h1>
     </header>
@@ -20,7 +20,7 @@
             </h2>
             <p>
                 With this mini app, you can create your own type design in a quick and easy way.<br>
-                First, type in the text you want. Then try to manipulate it by changing the base font and the size, or the funniest, click on different parts of the canvas to see how it deforms and takes on a new personality.
+                First, type in the text you want. The maximum length is 11 characters. If you need longer text, simply generate more files. Then try to manipulate it by changing the base font and the size, or the funniest, click on different parts of the canvas to see how it deforms and takes on a new personality.
 When you're happy with the result you can save a file ready to work with your food printer. Have a good time and Bon Appetit!
                 
             </p>
@@ -28,7 +28,7 @@ When you're happy with the result you can save a file ready to work with your fo
         <div class="userInputs">
             <div>
                 <h2>1. Type your text:</h2>
-                <input type="text" id="textInput" onkeyup="" value="3DigitalCooks" autofocus id="textField">
+                <input type="text" maxlength="11" id="textInput" value="3DIGITALCOOKS" autofocus id="textField">
             </div>
             <div>
                 <h2>2. Choose a base font:</h2>
@@ -43,7 +43,7 @@ When you're happy with the result you can save a file ready to work with your fo
             <h2>3. Click on different parts of the canvas to generate a new design:</h2>
         </div>
         <div id="message"></div>
-        <canvas id="playingField" width="1000" height="400" onclick=""></canvas>
+        <canvas id="playingField" width="1000" height="300" onclick=""></canvas>
         <div class="userInputs">
             <div>
                 <h2>5. Save your file:</h2>
