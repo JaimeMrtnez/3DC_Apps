@@ -21,7 +21,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 
 var font= null;
-var fontSize=140;
+var fontSize=120;
 var textToRender= "";
 var previewPath= null;;
 var snapPath= null;
@@ -52,6 +52,63 @@ function showErrorMessage(message) {
     }
     el.innerHTML = message;
 }
+function initialise() {
+    var canvas= document.getElementById("playingField");
+    canvas.addEventListener("mousedown", doMouseDown, false);
+}
+function inputListener() {
+    var textInput= document.getElementById("textInput");
+    textInput.addEventListener("keyup", doKeyUp, false);
+}
+function doKeyUp(){
+    textToRender= document.getElementById("textInput").value;
+    renderText();
+}
+    
+function doMouseDown(event) {
+    
+    //Getting canvas object and values
+    var canvas= document.getElementById("playingField");
+    var ctx= canvas.getContext('2D');
+    var canvasW= canvas.width;
+    var canvasY= canvas.height;
+    
+    //Setting coordinates from window to canvas position and from left corner reference to the center of the canvas
+    canvasXOffset= 520;
+    canvasYOffset= 685;
+    
+    //Setting offset coordinates
+    canvasXCentered= event.pageX - canvasXOffset;
+    canvasYCentered= event.pageY - canvasYOffset;
+    
+    //Getting arithmetic mean of coordinates to use it in next calculations
+    var coordsMaxMean= (canvasW + canvasY)/2;
+    //Getting arithmetic sum of coordinates to use it in next calculations
+    var coordsSum= (Math.abs(canvasXCentered) + Math.abs(canvasYCentered));
+    
+    //Setting Snap strength scaling the coordinates mean to a 0-100 period.
+    snapStrength= Math.round(coordsSum * (100/coordsMaxMean));
+    
+    //Setting Snap distance scaling the coordinates mean to a 0-100 period
+    //A value of 0, produces no response, so it is necessary to avoid it
+    if(snapStrength == 0) {
+        snapDistance= 1;
+    }else{
+        snapDistance= snapStrength;
+    }
+    
+    //Scaling x & y values to a -100,100 period
+    snapX= canvasXCentered/5;
+    snapY= canvasYCentered/1.5;
+    
+    renderText();
+    
+}
+function onBodyLoad() {
+    var body= document.body;
+    body.addEventListener("load", initialise(), false);
+}
+
 
 /*The MIT License (MIT)
 
