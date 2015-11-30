@@ -1,7 +1,11 @@
+html{
+    margin: 0;
+    padding: 20px;
+}
 body{
     font: 12px Helvetica, arial, sans-serif;
     min-width: 1024px;
-    margin: 0 0 50px 0;
+    margin: 0;
     padding: 0;
 }
 header{ 
@@ -9,8 +13,8 @@ header{
     background-color: darkgrey;
     border-bottom: 3px solid #555;
     height: 100px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
     font-family: 'Bree Serif', cursive;
     text-align: center;
 }
@@ -23,8 +27,8 @@ header h1{
 }
 main{
     width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
 }
 #textInput{
     font-size: 18px;
@@ -42,12 +46,8 @@ footer{
     background-color: darkgrey;
     border-bottom: 3px solid #555;
     height: 40px;
-    margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
 }
 .instructions{
-    margin-bottom: 10px;
     border-bottom: 3px solid #eee; 
 }
 .instructions p {
@@ -73,7 +73,6 @@ h2 {
 .userInputs div {
     border-bottom: 3px solid #eee;
     padding-bottom: 20px;
-    margin-bottom: 10px;
 }
 #fontSizeSlider{
     width: 990px; 
