@@ -25,10 +25,10 @@ var fontSize=120;
 var textToRender= "";
 var previewPath= null;;
 var snapPath= null;
-var snapStrength= 60;
-var snapDistance= 60;
-var snapX= -20;
-var snapY= 30;
+var snapStrength= 0;
+var snapDistance= 1;
+var snapX= 0;
+var snapY= 0;
 var fontFileName= "fonts/FiraSansMedium.woff";
 
 enableHighDPICanvas("playingField");
@@ -52,12 +52,12 @@ function showErrorMessage(message) {
     }
     el.innerHTML = message;
 }
+
 function initialise() {
     var canvas= document.getElementById("playingField");
     canvas.addEventListener("mousedown", doMouseDown, false);
 }
 
-    
 function doMouseDown(event) {
     
     //Getting canvas object and values
@@ -66,14 +66,20 @@ function doMouseDown(event) {
     var canvasW= canvas.width;
     var canvasY= canvas.height;
     
+    //Getting sliding paragraph height.
+    var expHeight= document.getElementById('explain').style.height;
     //Setting coordinates from window to canvas position and from left corner reference to the center of the canvas
-    canvasXOffset= 520;
-    canvasYOffset= 685;
-    
+    canvasXOffset= 510;
+    if (expHeight == 0){
+        canvasYOffset= 380;
+    } else {
+        canvasYOffset= 470;
+    }
     //Setting offset coordinates
     canvasXCentered= event.pageX - canvasXOffset;
     canvasYCentered= event.pageY - canvasYOffset;
-    
+    console.log(canvasXCentered);
+    console.log(canvasYCentered);
     //Getting arithmetic mean of coordinates to use it in next calculations
     var coordsMaxMean= (canvasW + canvasY)/2;
     //Getting arithmetic sum of coordinates to use it in next calculations
@@ -94,13 +100,43 @@ function doMouseDown(event) {
     snapX= canvasXCentered/5;
     snapY= canvasYCentered/1.5;
     
-    renderText();
-    
+    renderText(); 
 }
+
 function onBodyLoad() {
     var body= document.body;
     body.addEventListener("load", initialise(), false);
 }
+
+function changeButtonLabel(){
+    var text= document.getElementById('readMore').textContent;
+    if(text == 'Read More'){
+       document.getElementById('readMore').innerHTML= 'Hide';
+    }else if (text == 'Hide'){
+        document.getElementById('readMore').innerHTML= 'Read More';
+    }
+
+}
+
+//Slides in/out the introduction paragraph
+$(document).ready(function(){
+    $('#readMore').click(function() {
+        var height = $("#explain").height();
+        if( height > 0 ) {
+            $('#explain').css('height','0');
+        } else {
+            var clone = $('#explain').clone()
+                    .css({'position':'absolute','visibility':'hidden','height':'auto'})
+                    .addClass('slideClone')
+                    .appendTo('body');
+        
+            var newHeight = $(".slideClone").height();
+            $(".slideClone").remove();
+            $('#explain').css('height',newHeight + 'px');
+        }
+    });
+});
+
 
 
 /*The MIT License (MIT)
@@ -150,7 +186,7 @@ function doSnap(path) {
 function renderText() {
     if (!font) return;
     textToRender = document.getElementById('textInput').value;
-    snapPath = font.getPath(textToRender, 20, 200, fontSize, {kerning: true});
+    snapPath = font.getPath(textToRender, 30, 200, fontSize, {kerning: true});
     doSnap(snapPath);
     var snapCtx = document.getElementById('playingField').getContext('2d');
     snapCtx.clearRect(0, 0, 1000, 400);
