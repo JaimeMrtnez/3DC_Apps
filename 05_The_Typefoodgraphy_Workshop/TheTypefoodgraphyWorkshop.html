@@ -4,10 +4,11 @@
     <title>The Typefoodgraphy Workshop</title>
     <meta name="description" content="An application to generate typographic designs ready for 3D printing with food.">
     <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript" src="js/opentype.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
     <link rel="stylesheet" href="TheTypefoodgraphyWorkshop.css">
-    <link href='https://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oswald:300' rel='stylesheet' type='text/css'>
 </head>
 <body onload="initialise()">
     <header>
@@ -18,9 +19,10 @@
             <h2>
                 Welcome to The Typefoodgraphy Workshop!
             </h2>
-            <p>
+            <button id="readMore" onclick="changeButtonLabel()">Read More</button>
+            <p id="explain">
                 With this mini app, you can create your own type design in a quick and easy way.<br>
-                First, type in the text you want. The maximum length is 11 characters. If you need longer text, simply generate more files. Then try to manipulate it by changing the base font and the size, or the funniest, click on different parts of the canvas to see how it deforms and takes on a new personality.
+                First, type in the text you want. The maximum length is 10 characters. If you need longer text, simply generate more files. Then try to manipulate it by changing the base font and the size, or the funniest, click on different parts of the canvas to see how it deforms and takes on a new personality.
 When you're happy with the result you can save a file ready to work with your food printer. Have a good time and Bon Appetit!
                 
             </p>
@@ -28,7 +30,7 @@ When you're happy with the result you can save a file ready to work with your fo
         <div class="userInputs">
             <div>
                 <h2>1. Type your text:</h2>
-                <input type="text" maxlength="11" id="textInput" value="3DIGITALCOOKS" autofocus id="textField" onkeyup="renderText()">
+                <input type="text" maxlength="10" id="textInput" value="Yummy!" autofocus id="textField" onkeyup="renderText()">
             </div>
             <div>
                 <h2>2. Choose a base font:</h2>
@@ -46,14 +48,14 @@ When you're happy with the result you can save a file ready to work with your fo
         <canvas id="playingField" width="1000" height="300" onclick=""></canvas>
         <div class="userInputs">
             <div>
-                <h2>4. Adjust the size</h2>
+                <h2>4. Adjust the size:</h2>
                 <input type="range" id="fontSizeSlider" name="fontSize" min="120" max="240" step="20" value="120" >
             </div>
             <div>
                 <h2>5. Save your file:</h2>
-                <input type="button" id="settingsButton" class="button" value="Printer Settings">
+                <button id="settingsButton" class="button">Printer Settings</button>
                 <input type="text" value="filename">.gcode
-                <input type="button" id="saveButton" class="button" value="Save">
+                <button id="saveButton" class="button" value="">Save</button>
             </div>
         </div>
     </main>
