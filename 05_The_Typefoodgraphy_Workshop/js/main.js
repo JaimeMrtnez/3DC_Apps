@@ -56,14 +56,7 @@ function initialise() {
     var canvas= document.getElementById("playingField");
     canvas.addEventListener("mousedown", doMouseDown, false);
 }
-function inputListener() {
-    var textInput= document.getElementById("textInput");
-    textInput.addEventListener("keyup", doKeyUp, false);
-}
-function doKeyUp(){
-    textToRender= document.getElementById("textInput").value;
-    renderText();
-}
+
     
 function doMouseDown(event) {
     
@@ -157,7 +150,7 @@ function doSnap(path) {
 function renderText() {
     if (!font) return;
     textToRender = document.getElementById('textInput').value;
-    snapPath = font.getPath(textToRender, 50, 200, fontSize, {kerning: true});
+    snapPath = font.getPath(textToRender, 20, 200, fontSize, {kerning: true});
     doSnap(snapPath);
     var snapCtx = document.getElementById('playingField').getContext('2d');
     snapCtx.clearRect(0, 0, 1000, 400);
