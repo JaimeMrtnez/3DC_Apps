@@ -90,6 +90,7 @@ h3{
 }
 h4{
     margin-bottom: 0;
+    line-height: 0.5;
 }
 .userInputs div {
     border-bottom: 3px solid #eee;
