@@ -37,7 +37,7 @@ When you're happy with the result you can save a file ready to work with your fo
                 <form id="fontForm">
                     <input type="radio" name="fontName" value="font1" checked>font1
                     <input type="radio" name="fontName" value="font2">font2
-                    <input type="radio" name="fontName" value="font3">font3
+                    <input type="radio" name="fontName" value="font3">font3elementos
                     <input type="radio" name="fontName" value="font4">font4
                     <input type="radio" name="fontName" value="font5">font5
                 </form>
@@ -51,7 +51,10 @@ When you're happy with the result you can save a file ready to work with your fo
                 <h2>4. Adjust the size:</h2>
                 <input type="range" id="fontSizeSlider" name="fontSize" min="120" max="240" step="20" value="120" >
             </div>
-            <div>
+            <div id= "pointsDisplay">
+                <h2>Shapes path points: (Only during the development)</h2>
+            </div>
+            <div class="userInputs">
                 <h2>5. Save your file:</h2>
                 <button id="settingsButton" class="button">Printer Settings</button>
                 <input type="text" value="filename">.gcode
