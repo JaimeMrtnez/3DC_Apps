@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <canvas id="canvas" width="300" height="300" style="border:1px solid #d3d3d3;"></canvas>
+    </body>
+</html>
+
+
+<script type="text/javascript">
+var path;
+var iPoint= {x:100.8512, y:180.4844};
+var curve= {x:119.5392, y:200.1888 ,x1:100.8512, y1:194.8296, x2:110.2068, y2: 200.1888};
+
+function getCurvePath(currentPoint, curve){
+    var t, tSqr, tCub, ax, bx, cx, ay, by, cy;
+    var curvePoint= {};
+    var curvePath= [];
+    console.log(currentPoint, curve);
+    //console.log(curve);
+    /*** Previous calculations ***/
+    
+    //Polynomial coefficients calculations
+    cx= 3.0 * (curve.x1 - currentPoint.x);
+    cx= cx.toFixed(4);
+    cx= parseFloat(cx);
+    bx= 3.0 * (curve.x2 - curve.x1) - cx;
+    bx= bx.toFixed(4);
+    bx= parseFloat(bx);
+    ax= curve.x - currentPoint.x - cx - bx;
+    ax= ax.toFixed(4);
+    ax= parseFloat(ax);
+    cy= 3.0 * (curve.y1 - currentPoint.y);
+    cy= cy.toFixed(4);
+    cy= parseFloat(cy);
+    by= 3.0 * (curve.y2 - curve.y1) - cy;
+    by= by.toFixed(4);
+    by= parseFloat(by);
+    ay= curve.y - currentPoint.y - cy - by;
+    ay= ay.toFixed(4);
+    ay= parseFloat(ay);
+    console.log(cx, bx, ax, cy, by, ay);
+    
+    //Curve point calculations
+    for(t= 0.0; t< 1.0; t+= 0.02){
+        tSqr= Math.pow(t, 2);
+        tCub= Math.pow(t, 3);
+        curvePoint.x= (ax * tCub) + (bx * tSqr) + (cx * t) + currentPoint.x;
+        curvePoint.x= curvePoint.x.toFixed(4);
+        curvePoint.x= parseFloat(curvePoint.x);
+        curvePoint.y= (ay * tCub) + (by * tSqr) + (cy * t) + currentPoint.y;
+        curvePoint.y= curvePoint.y.toFixed(4);
+        curvePoint.y= parseFloat(curvePoint.y);
+        
+        curvePath.push(curvePoint.x);
+        curvePath.push(curvePoint.y);
+        
+    }
+    return curvePath;
+}
+    
+path= getCurvePath(iPoint, curve);
+console.log(path);
+var canvas= document.getElementById("canvas");
+var ctx= canvas.getContext('2d');
+
+ctx.moveTo(path[0],path[1]);
+for(var i= 0; i<= path.length; i+=2){
+    ctx.moveTo(path[i],path[i+1]);
+    ctx.lineTo(path[i+2],path[i+3]);
+    
+}
+ctx.stroke();
+</script>
+
+
