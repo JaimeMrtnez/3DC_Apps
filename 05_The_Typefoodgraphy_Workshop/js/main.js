@@ -21,8 +21,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 
 var font= null;
-var fontSize=120;
+var fontSize=240;
 var textToRender= "";
+var baseLineHeight= 240;
+var frameDistance= 200;
 var previewPath= null;;
 var snapPath= null;
 var snapStrength= 0;
@@ -34,8 +36,29 @@ var currentPoint;
 var curve;
 
 enableHighDPICanvas('playingField');
+openTypeLoad(fontFileName);
 
-opentype.load(fontFileName, function(err, font) {
+function resizeText(){
+    var slider= document.getElementById('fontSizeSlider');
+    var fontSizeDisplay= document.getElementById('fontSizeDisplay');
+    var max= slider.getAttribute('max');
+    var min= slider.getAttribute('min');
+    fontSize= slider.value;
+    console.log(fontSize);
+    if(fontSize == max){
+        fontSizeDisplay.innerHTML= 'MAX';
+    }else if(fontSize == min){
+        fontSizeDisplay.innerHTML= 'MIN';
+    }else{
+        fontSizeDisplay.innerHTML= fontSize;
+    }
+
+    renderText();
+    displayPathPoints();
+}
+
+function openTypeLoad(fontFileName){
+    opentype.load(fontFileName, function(err, font) {
     var amount, glyph, ctx, x, y, fontSize;
     if (err) {
         showErrorMessage(err.toString());
@@ -44,6 +67,7 @@ opentype.load(fontFileName, function(err, font) {
     onFontLoaded(font);
     renderText();
 });
+}
 
 function showErrorMessage(message) {
     var el = document.getElementById('message');
@@ -73,15 +97,15 @@ function doMouseDown(event) {
     //Setting coordinates from window to canvas position and from left corner reference to the center of the canvas
     canvasXOffset= 510;
     if (expHeight == 0){
-        canvasYOffset= 380;
+        canvasYOffset= 400;
     } else {
-        canvasYOffset= 470;
+        canvasYOffset= 510;
     }
     //Setting offset coordinates
     canvasXCentered= event.pageX - canvasXOffset;
     canvasYCentered= event.pageY - canvasYOffset;
-    //console.log(canvasXCentered);
-    //console.log(canvasYCentered);
+    console.log(canvasXCentered);
+    console.log(canvasYCentered);
     //Getting arithmetic mean of coordinates to use it in next calculations
     var coordsMaxMean= (canvasW + canvasY)/2;
     //Getting arithmetic sum of coordinates to use it in next calculations
@@ -122,6 +146,99 @@ function changeButtonLabel(){
 
 }
 
+function adaptTextSize(){
+    var textLength, fontSizeSlider, fontSizeDisplay;
+    
+    textToRender= document.getElementById('textInput').value;
+    fontSizeSlider= document.getElementById('fontSizeSlider');
+    fontSizeDisplay= document.getElementById('fontSizeDisplay');
+    textLength= textToRender.length;
+    switch(textLength) {
+        case 1:
+            fontSize= 300;
+            fontSizeDisplay.innerHTML= fontSize;
+            baseLineHeight= 260;
+            frameDistance= 20;
+            fontSizeSlider.setAttribute('value',fontSize);
+            fontSizeSlider.setAttribute('max', 350);
+        break;
+        case 2:
+            fontSize= 300;
+            fontSizeDisplay.innerHTML= fontSize;
+            baseLineHeight= 260;
+            frameDistance= 20;
+            fontSizeSlider.setAttribute('value',fontSize);
+            fontSizeSlider.setAttribute('max', 320);
+        break;
+        case 3:
+            fontSize= 300;
+            fontSizeDisplay.innerHTML= fontSize;
+            baseLineHeight= 260;
+            frameDistance= 20;
+            fontSizeSlider.setAttribute('value',fontSize);
+            fontSizeSlider.setAttribute('max', 320);
+        break;
+        case 4:
+            fontSize= 260;
+            fontSizeDisplay.innerHTML= fontSize;
+            baseLineHeight= 260;
+            frameDistance= 20;
+            fontSizeSlider.setAttribute('value',fontSize);
+            fontSizeSlider.setAttribute('max', 320);
+        break;
+        case 5:
+            fontSize= 220;
+            fontSizeDisplay.innerHTML= fontSize;
+            baseLineHeight= 250;
+            frameDistance= 20;
+            fontSizeSlider.setAttribute('value',fontSize);
+            fontSizeSlider.setAttribute('max', 230);
+        break;
+        case 6:
+            fontSize= 180;
+            fontSizeDisplay.innerHTML= fontSize;
+            baseLineHeight= 240;
+            frameDistance= 20;
+            fontSizeSlider.setAttribute('value',fontSize);
+            fontSizeSlider.setAttribute('max', 190);
+        break;
+        case 7:
+            fontSize= 155;
+            fontSizeDisplay.innerHTML= fontSize;
+            baseLineHeight= 230;
+            frameDistance= 20;
+            fontSizeSlider.setAttribute('value',fontSize);
+            fontSizeSlider.setAttribute('max', 160);
+        break;
+        case 8:
+            fontSize= 135;
+            fontSizeDisplay.innerHTML= fontSize;
+            baseLineHeight= 220;
+            frameDistance= 20;
+            fontSizeSlider.setAttribute('value',fontSize);
+            fontSizeSlider.setAttribute('max', 140);
+        break;
+        case 9:
+            fontSize= 120;
+            fontSizeDisplay.innerHTML= fontSize;
+            baseLineHeight= 210;
+            frameDistance= 20;
+            fontSizeSlider.setAttribute('value',fontSize);
+            fontSizeSlider.setAttribute('max', 125);
+        break;
+        case 10:
+            fontSize= 110;
+            fontSizeDisplay.innerHTML= 'MAX';
+            baseLineHeight= 200;
+            frameDistance= 20;
+            fontSizeSlider.setAttribute('value',fontSize);
+            fontSizeSlider.setAttribute('max', 120);
+        break;
+
+    }
+    
+}
+
 
 function displayPathPoints(){
     var i, cmd, pointsDisplay, html, shapeNum;
@@ -160,9 +277,17 @@ function displayPathPoints(){
                 cmd[i].x2= cmd[i].x2.toFixed(4);
                 cmd[i].y2= cmd[i].y2.toFixed(4);
                 html+= '<dd><h4>Curve to:</h4><br>x: ' + cmd[i].x + ', y: ' + cmd[i].y +
-                ' (Bézier curve control points: x1: '+ cmd[i].x1 + ', y1: ' + cmd[i].y1 +
+                ' (Cubic Bézier curve control points: x1: '+ cmd[i].x1 + ', y1: ' + cmd[i].y1 +
                 ' x2: ' + cmd[i].x2 + ', y2: ' + cmd[i].y2 +')</dd>';
-            break;   
+            break;
+            case 'Q':
+                cmd[i].x= cmd[i].x.toFixed(4);
+                cmd[i].y= cmd[i].y.toFixed(4);
+                cmd[i].x1= cmd[i].x1.toFixed(4);
+                cmd[i].y1= cmd[i].y1.toFixed(4);
+                html+= '<dd><h4>Curve to:</h4><br>x: ' + cmd[i].x + ', y: ' + cmd[i].y +
+                ' (Quadratic Bézier curve control point: x1: '+ cmd[i].x1 + ', y1: ' + cmd[i].y1 +')</dd>';  
+            break;
         }
     }
     html += '</dl>';
@@ -171,7 +296,30 @@ function displayPathPoints(){
     
 }
 
-function getCurvePath(currentPoint, curve){
+function getQuadraticCurvePath(currentPoint, curve){
+    var t, tSqr, oneMinust, oneMinustSqr;
+    var curvePath= [];
+    var curvePoint= {};
+    
+    for(t= 0.0; t< 1.0; t+= 0.02){
+        /*** Previous calculations ***/
+        tSqr= Math.pow(t, 2);
+        oneMinust= (1.0 - t);
+        oneMinustSqr= Math.pow(oneMinust, 2);
+        //Curve point calculations
+        curvePoint.x= oneMinustSqr * currentPoint.x + 2 * oneMinust * t * curve.x1 + tSqr * curve.x;
+        curvePoint.y= oneMinustSqr * currentPoint.y + 2 * oneMinust * t * curve.y1 + tSqr * curve.y;
+        //Rounding values
+        curvePoint.x= parseFloat(curvePoint.x.toFixed(4));
+        curvePoint.y= parseFloat(curvePoint.y.toFixed(4));
+        //Storing points in an array
+        curvePath.push(curvePoint.x);
+        curvePath.push(curvePoint.y);
+    }
+    return curvePath;
+}
+
+function getCubicCurvePath(currentPoint, curve){
     var t, tSqr, tCub, ax, bx, cx, ay, by, cy;
     var curvePoint= {};
     var curvePath= [];
@@ -180,40 +328,30 @@ function getCurvePath(currentPoint, curve){
     
     //Polynomial coefficients calculations
     cx= 3.0 * (curve.x1 - currentPoint.x);
-    cx= cx.toFixed(4);
-    cx= parseFloat(cx);
+    cx= parseFloat(cx.toFixed(4));
     bx= 3.0 * (curve.x2 - curve.x1) - cx;
-    bx= bx.toFixed(4);
-    bx= parseFloat(bx);
+    bx= parseFloat(bx.toFixed(4));
     ax= curve.x - currentPoint.x - cx - bx;
-    ax= ax.toFixed(4);
-    ax= parseFloat(ax);
+    ax= parseFloat(ax.toFixed(4));
     cy= 3.0 * (curve.y1 - currentPoint.y);
-    cy= cy.toFixed(4);
-    cy= parseFloat(cy);
+    cy= parseFloat(cy.toFixed(4));
     by= 3.0 * (curve.y2 - curve.y1) - cy;
-    by= by.toFixed(4);
-    by= parseFloat(by);
+    by= parseFloat(by.toFixed(4));
     ay= curve.y - currentPoint.y - cy - by;
-    ay= ay.toFixed(4);
-    ay= parseFloat(ay);
+    ay= parseFloat(ay.toFixed(4));
     //console.log(cx, bx, ax, cy, by, ay);
     
     //Curve point calculations
     for(t= 0.0; t< 1.0; t+= 0.02){
         tSqr= Math.pow(t, 2);
-        tSqr= tSqr.toFixed(4);
-        tSqr= parseFloat(tSqr);
+        tSqr= parseFloat(tSqr.toFixed(4));
         tCub= Math.pow(t, 3);
-        tCub= tCub.toFixed(4);
-        tCub= parseFloat(tCub);
+        tCub= parseFloat(tCub.toFixed(4));
         curvePoint.x= (ax * tCub) + (bx * tSqr) + (cx * t) + currentPoint.x;
-        curvePoint.x= curvePoint.x.toFixed(4);
-        curvePoint.x= parseFloat(curvePoint.x);
+        curvePoint.x= parseFloat(curvePoint.x.toFixed(4));
         curvePoint.y= (ay * tCub) + (by * tSqr) + (cy * t) + currentPoint.y;
-        curvePoint.y= curvePoint.y.toFixed(4);
-        curvePoint.y= parseFloat(curvePoint.y);
-        
+        curvePoint.y= parseFloat(curvePoint.y.toFixed(4));
+        //Storing points in an array
         curvePath.push(curvePoint.x);
         curvePath.push(curvePoint.y);
         
@@ -221,23 +359,19 @@ function getCurvePath(currentPoint, curve){
     return curvePath;
 }
 
+//This function treats and stores in an array all the points of the path.
 function createFullPathArray(){
-    var i, j, cmd, currentPathLength; 
+    console.log(snapPath);
+    var i, j, k, cmd, currentPathLength; 
     var initShapePoint={};
     var currentPoint={};
     var fullPath= [];
     var curvePath= [];
     cmd= snapPath.commands;
-    
     for(i=0; i< cmd.length; i++){
+        //Consulting the type of command for different treatment
         switch(cmd[i].type){
             case 'M':
-                //Rounding values
-                //cmd[i].x= cmd[i].x.toFixed(4);
-                //cmd[i].x= parseFloat(cmd[i].x);
-                //cmd[i].y= cmd[i].y.toFixed(4);
-                //cmd[i].y= parseFloat(cmd[i].y);
-                
                 //Storing initial points for the shape closing
                 initShapePoint.x= parseFloat(cmd[i].x);
                 initShapePoint.x= initShapePoint.x.toFixed(4);
@@ -250,11 +384,6 @@ function createFullPathArray(){
                 fullPath.push(initShapePoint.y);
             break;
             case 'L':
-                //Rounding values
-                //cmd[i].x= cmd[i].x.toFixed(4);
-                //cmd[i].x= parseFloat(cmd[i].x);
-                //cmd[i].y= cmd[i].y.toFixed(4);
-                //cmd[i].y= parseFloat(cmd[i].y);
                 //Storing values in the fullPath array
                 fullPath.push(parseFloat(cmd[i].x));
                 fullPath.push(parseFloat(cmd[i].y));
@@ -264,13 +393,28 @@ function createFullPathArray(){
                 fullPath.push(initShapePoint.x);
                 fullPath.push(initShapePoint.y);
             break;
-            case 'C': 
+            case 'C':
+                //Getting the last point
                 currentPoint.x= fullPath[fullPath.length-2];
                 currentPoint.y= fullPath[fullPath.length-1];
-                curvePath= getCurvePath(currentPoint, cmd[i]);
+                //Generating cubic bézier curve path
+                curvePath= getCubicCurvePath(currentPoint, cmd[i]);
+                //Saving points in the main array
                 for(j=0; j< curvePath.length; j++){
                     fullPath.push(curvePath[j]);
                 }
+            break;
+            case 'Q':
+                //Getting the last point
+                currentPoint.x= fullPath[fullPath.length-2];
+                currentPoint.y= fullPath[fullPath.length-1];
+                //Generating quadratic bézier curve path
+                curvePath= getQuadraticCurvePath(currentPoint, cmd[i]);
+                //Saving points in the main array
+                for(k=0; k< curvePath.length; k++){
+                    fullPath.push(curvePath[k]);
+                }
+                
             break;
         }
     
@@ -278,6 +422,42 @@ function createFullPathArray(){
     console.log(fullPath);
     
 }
+
+function onFontLoaded(font) {
+    var i;
+    window.font = font;
+    amount = Math.min(100, font.glyphs.length);
+    for (i = 0; i < amount; i++) {
+        glyph = font.glyphs.get(i);
+    }
+    renderText();
+    displayPathPoints();
+}
+
+function renderText() {
+    var snapCtx;
+    if (!font) return;
+    textToRender = document.getElementById('textInput').value;
+    snapPath = font.getPath(textToRender, frameDistance, baseLineHeight, fontSize, {kerning: true});
+    doSnap(snapPath);
+    snapCtx = document.getElementById('playingField').getContext('2d');
+    snapCtx.clearRect(0, 0, 1000, 400);
+    snapPath.draw(snapCtx);
+}
+
+function changeBaseFont(){
+    var fontForm= document.getElementById('fontForm');
+    var fontSelected;
+    for (var i=0; i< fontForm.length; i++){
+        if(fontForm[i].checked){
+            fontSelected= fontForm[i].value;
+        }
+    }
+    openTypeLoad(fontSelected);
+}
+
+
+
 
 //Slides in/out the introduction paragraph
 $(document).ready(function(){
@@ -345,16 +525,7 @@ function doSnap(path) {
     }
 }
 
-function renderText() {
-    if (!font) return;
-    textToRender = document.getElementById('textInput').value;
-    snapPath = font.getPath(textToRender, 30, 200, fontSize, {kerning: true});
-    doSnap(snapPath);
-    var snapCtx = document.getElementById('playingField').getContext('2d');
-    snapCtx.clearRect(0, 0, 1000, 400);
-    snapPath.draw(snapCtx);
-    //console.log(snapPath);
-}
+
 
 function enableHighDPICanvas(canvas) {
     if (typeof canvas === 'string') {
@@ -371,15 +542,7 @@ function enableHighDPICanvas(canvas) {
     canvas.getContext('2d').scale(pixelRatio, pixelRatio);
 }
 
-function onFontLoaded(font) {
-    var i;
-    window.font = font;
-    amount = Math.min(100, font.glyphs.length);
-    for (i = 0; i < amount; i++) {
-        glyph = font.glyphs.get(i);
-    }
-    renderText();
-}
+
 
 
 
