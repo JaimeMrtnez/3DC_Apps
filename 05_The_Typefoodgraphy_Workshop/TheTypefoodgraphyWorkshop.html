@@ -21,36 +21,37 @@
             </h2>
             <button id="readMore" onclick="changeButtonLabel()">Read More</button>
             <p id="explain">
-                With this mini app, you can create your own type design in a quick and easy way.<br>
-                First, type in the text you want. The maximum length is 10 characters. If you need longer text, simply generate more files. Then try to manipulate it by changing the base font and the size, or the funniest, click on different parts of the canvas to see how it deforms and takes on a new personality.
-When you're happy with the result you can save a file ready to work with your food printer. Have a good time and Bon Appetit!
+                With this mini app, you can create your own type design for your 3D food printer in a quick and easy way.<br>
+                First, type in the text you want. The maximum length is 10 characters. If you need longer text, simply adjust the size and generate more files. Then, try to manipulate it by changing the base font and the size, or the funniest, click on different parts of the canvas to see how it deforms and takes on a new personality.
+When you're happy with the result you can change the printer settings and save a G-Code file ready to work with your printer.<br> Have a good time and Bon Appetit!
                 
             </p>
         </div>
         <div class="userInputs">
             <div>
                 <h2>1. Type your text:</h2>
-                <input type="text" maxlength="10" id="textInput" value="Yummy!" autofocus id="textField" onkeyup="renderText()">
+                <input type="text" maxlength="10" id="textInput" value="3DC" autofocus id="textField" onkeyup="adaptTextSize(); renderText(); displayPathPoints()">
             </div>
             <div>
                 <h2>2. Choose a base font:</h2>
-                <form id="fontForm">
-                    <input type="radio" name="fontName" value="font1" checked>font1
-                    <input type="radio" name="fontName" value="font2">font2
-                    <input type="radio" name="fontName" value="font3">font3elementos
-                    <input type="radio" name="fontName" value="font4">font4
-                    <input type="radio" name="fontName" value="font5">font5
+                <form id="fontForm" onchange="changeBaseFont()">
+                    <input type="radio" name="fontName" value="fonts/FiraSansMedium.woff" checked>Fira Sans
+                    <input type="radio" name="fontName" value="fonts/hussarbd-web.woff">Hussar
+                    <input type="radio" name="fontName" value="fonts/Mignone.ttf">Mignone
+                    <input type="radio" name="fontName" value="fonts/Sanchezregular.otf">Sanchez
+                    <input type="radio" name="fontName" value="fonts/DingsbumsBats.ttf">Dingsbums Bats
                 </form>
             </div>
-            <h2>3. Click on different parts of the canvas to generate a new design:</h2>
+            <h2>3. Adjust the size and click on different parts of the canvas to generate a new design:</h2>
+            
+                <input type="range" id="fontSizeSlider" name="fontSize" min="120" max="320" step="1" value="" onchange=" resizeText()">
+                <span id= "fontSizeDisplay">240</span>
+            
         </div>
         <div id="message"></div>
         <canvas id="playingField" width="1000" height="300" onclick=""></canvas>
         <div class="userInputs">
-            <div>
-                <h2>4. Adjust the size:</h2>
-                <input type="range" id="fontSizeSlider" name="fontSize" min="120" max="240" step="20" value="120" >
-            </div>
+            
             <div id= "pointsDisplay">
                 <h2>Shapes path points: (Only during the development)</h2>
             </div>

@@ -41,6 +41,7 @@ main{
     border: 1px solid #eee;
     box-shadow: 1px 0 5px #ccc;
     cursor: pointer;
+    margin-top: 5px;
 
 }
 footer{
@@ -103,6 +104,14 @@ h4{
 }
 #fontSizeSlider{
     width: 730px;
+}
+#fontSizeDisplay{
+    position: relative;
+    bottom: 3px;
+    width: 40px;
+    padding: 3px 5px 3px 5px;
+    font-size: 1.2em;
+    font-weight: 600;
 }
 #settingsButton {
     margin-right: 20px;
