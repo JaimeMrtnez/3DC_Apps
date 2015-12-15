@@ -21,10 +21,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 
 var font= null;
-var fontSize=240;
+var fontSize=280;
 var textToRender= "";
-var baseLineHeight= 240;
-var frameDistance= 200;
+var baseLineHeight= 300;
+var frameDistance= 20;
 var previewPath= null;;
 var snapPath= null;
 var snapStrength= 0;
@@ -37,6 +37,13 @@ var curve;
 
 enableHighDPICanvas('playingField');
 openTypeLoad(fontFileName);
+
+function unsnap(){
+     snapStrength= 0;
+     snapDistance= 1;
+     snapX= 0;
+     snapY= 0;
+}
 
 function resizeText(){
     var slider= document.getElementById('fontSizeSlider');
@@ -57,32 +64,7 @@ function resizeText(){
     displayPathPoints();
 }
 
-function openTypeLoad(fontFileName){
-    opentype.load(fontFileName, function(err, font) {
-    var amount, glyph, ctx, x, y, fontSize;
-    if (err) {
-        showErrorMessage(err.toString());
-        return;
-    }
-    onFontLoaded(font);
-    renderText();
-});
-}
 
-function showErrorMessage(message) {
-    var el = document.getElementById('message');
-    if (!message || message.trim().length === 0) {
-        el.style.display = 'none';
-    } else {
-        el.style.display = 'block';
-    }
-    el.innerHTML = message;
-}
-
-function initialise() {
-    var canvas= document.getElementById('playingField');
-    canvas.addEventListener('mousedown', doMouseDown, false);
-}
 
 function doMouseDown(event) {
     
@@ -96,10 +78,11 @@ function doMouseDown(event) {
     var expHeight= document.getElementById('explain').style.height;
     //Setting coordinates from window to canvas position and from left corner reference to the center of the canvas
     canvasXOffset= 510;
-    if (expHeight == 0){
-        canvasYOffset= 400;
-    } else {
-        canvasYOffset= 510;
+    var text= document.getElementById('readMore').textContent;
+    if(text == 'Read More'){
+       canvasYOffset= 460;
+    }else if (text == 'Hide'){
+        canvasYOffset= 560;
     }
     //Setting offset coordinates
     canvasXCentered= event.pageX - canvasXOffset;
@@ -131,20 +114,7 @@ function doMouseDown(event) {
     createFullPathArray();
 }
 
-function onBodyLoad() {
-    var body= document.body;
-    body.addEventListener('load', initialise(), false);
-}
 
-function changeButtonLabel(){
-    var text= document.getElementById('readMore').textContent;
-    if(text == 'Read More'){
-       document.getElementById('readMore').innerHTML= 'Hide';
-    }else if (text == 'Hide'){
-        document.getElementById('readMore').innerHTML= 'Read More';
-    }
-
-}
 
 function adaptTextSize(){
     var textLength, fontSizeSlider, fontSizeDisplay;
@@ -155,41 +125,41 @@ function adaptTextSize(){
     textLength= textToRender.length;
     switch(textLength) {
         case 1:
-            fontSize= 300;
+            fontSize= 280;
             fontSizeDisplay.innerHTML= fontSize;
-            baseLineHeight= 260;
+            baseLineHeight= 320;
             frameDistance= 20;
             fontSizeSlider.setAttribute('value',fontSize);
-            fontSizeSlider.setAttribute('max', 350);
+            fontSizeSlider.setAttribute('max', 400);
         break;
         case 2:
-            fontSize= 300;
+            fontSize= 280;
             fontSizeDisplay.innerHTML= fontSize;
-            baseLineHeight= 260;
+            baseLineHeight= 320;
             frameDistance= 20;
             fontSizeSlider.setAttribute('value',fontSize);
-            fontSizeSlider.setAttribute('max', 320);
+            fontSizeSlider.setAttribute('max', 400);
         break;
         case 3:
-            fontSize= 300;
+            fontSize= 280;
             fontSizeDisplay.innerHTML= fontSize;
-            baseLineHeight= 260;
+            baseLineHeight= 320;
             frameDistance= 20;
             fontSizeSlider.setAttribute('value',fontSize);
-            fontSizeSlider.setAttribute('max', 320);
+            fontSizeSlider.setAttribute('max', 380);
         break;
         case 4:
             fontSize= 260;
             fontSizeDisplay.innerHTML= fontSize;
-            baseLineHeight= 260;
+            baseLineHeight= 320;
             frameDistance= 20;
             fontSizeSlider.setAttribute('value',fontSize);
-            fontSizeSlider.setAttribute('max', 320);
+            fontSizeSlider.setAttribute('max', 290);
         break;
         case 5:
             fontSize= 220;
             fontSizeDisplay.innerHTML= fontSize;
-            baseLineHeight= 250;
+            baseLineHeight= 300;
             frameDistance= 20;
             fontSizeSlider.setAttribute('value',fontSize);
             fontSizeSlider.setAttribute('max', 230);
@@ -197,7 +167,7 @@ function adaptTextSize(){
         case 6:
             fontSize= 180;
             fontSizeDisplay.innerHTML= fontSize;
-            baseLineHeight= 240;
+            baseLineHeight= 300;
             frameDistance= 20;
             fontSizeSlider.setAttribute('value',fontSize);
             fontSizeSlider.setAttribute('max', 190);
@@ -205,7 +175,7 @@ function adaptTextSize(){
         case 7:
             fontSize= 155;
             fontSizeDisplay.innerHTML= fontSize;
-            baseLineHeight= 230;
+            baseLineHeight= 300;
             frameDistance= 20;
             fontSizeSlider.setAttribute('value',fontSize);
             fontSizeSlider.setAttribute('max', 160);
@@ -213,7 +183,7 @@ function adaptTextSize(){
         case 8:
             fontSize= 135;
             fontSizeDisplay.innerHTML= fontSize;
-            baseLineHeight= 220;
+            baseLineHeight= 280;
             frameDistance= 20;
             fontSizeSlider.setAttribute('value',fontSize);
             fontSizeSlider.setAttribute('max', 140);
@@ -221,7 +191,7 @@ function adaptTextSize(){
         case 9:
             fontSize= 120;
             fontSizeDisplay.innerHTML= fontSize;
-            baseLineHeight= 210;
+            baseLineHeight= 280;
             frameDistance= 20;
             fontSizeSlider.setAttribute('value',fontSize);
             fontSizeSlider.setAttribute('max', 125);
@@ -229,7 +199,7 @@ function adaptTextSize(){
         case 10:
             fontSize= 110;
             fontSizeDisplay.innerHTML= 'MAX';
-            baseLineHeight= 200;
+            baseLineHeight= 280;
             frameDistance= 20;
             fontSizeSlider.setAttribute('value',fontSize);
             fontSizeSlider.setAttribute('max', 120);
@@ -361,7 +331,7 @@ function getCubicCurvePath(currentPoint, curve){
 
 //This function treats and stores in an array all the points of the path.
 function createFullPathArray(){
-    console.log(snapPath);
+    //console.log(snapPath);
     var i, j, k, cmd, currentPathLength; 
     var initShapePoint={};
     var currentPoint={};
@@ -423,6 +393,49 @@ function createFullPathArray(){
     
 }
 
+function changeBaseFont(){
+    var fontForm= document.getElementById('fontForm');
+    var fontSelected;
+    for (var i=0; i< fontForm.length; i++){
+        if(fontForm[i].checked){
+            fontSelected= fontForm[i].value;
+        }
+    }
+    openTypeLoad(fontSelected);
+}
+
+function changeButtonLabel(){
+    var text= document.getElementById('readMore').textContent;
+    if(text == 'Read More'){
+       document.getElementById('readMore').innerHTML= 'Hide';
+    }else if (text == 'Hide'){
+        document.getElementById('readMore').innerHTML= 'Read More';
+    }
+
+}
+
+function onBodyLoad() {
+    var body= document.body;
+    body.addEventListener('load', initialise(), false);
+}
+
+
+
+function showErrorMessage(message) {
+    var el = document.getElementById('message');
+    if (!message || message.trim().length === 0) {
+        el.style.display = 'none';
+    } else {
+        el.style.display = 'block';
+    }
+    el.innerHTML = message;
+}
+
+function initialise() {
+    var canvas= document.getElementById('playingField');
+    canvas.addEventListener('mousedown', doMouseDown, false);
+}
+
 function onFontLoaded(font) {
     var i;
     window.font = font;
@@ -430,9 +443,23 @@ function onFontLoaded(font) {
     for (i = 0; i < amount; i++) {
         glyph = font.glyphs.get(i);
     }
+    unsnap();
     renderText();
     displayPathPoints();
 }
+
+
+function openTypeLoad(fontFileName){
+    opentype.load(fontFileName, function(err, font) {
+    var amount, glyph, ctx, x, y, fontSize;
+    if (err) {
+        showErrorMessage(err.toString());
+        return;
+    }
+    onFontLoaded(font);
+});
+}
+
 
 function renderText() {
     var snapCtx;
@@ -445,16 +472,7 @@ function renderText() {
     snapPath.draw(snapCtx);
 }
 
-function changeBaseFont(){
-    var fontForm= document.getElementById('fontForm');
-    var fontSelected;
-    for (var i=0; i< fontForm.length; i++){
-        if(fontForm[i].checked){
-            fontSelected= fontForm[i].value;
-        }
-    }
-    openTypeLoad(fontSelected);
-}
+
 
 
 

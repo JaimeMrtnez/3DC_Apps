@@ -10,20 +10,23 @@ body{
 }
 header{ 
     width: 1000px;
-    background-color: darkgrey;
-    border-bottom: 3px solid #555;
+    background-color: white;
     height: 60px;
     margin-left: 0;
     margin-right: 0;
     margin-bottom: 5px;
     padding-top: 10px;
+    padding-bottom: 10px;
     font-family: 'Oswald', sans-serif;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px 3px #eee;
 }
 header h1{
-    color: white;
+    color: #555;
     display: inline;
-    font-size: 30px;
-    margin-left: 10px;
+    font-size: 40px;
 }
 main{
     width: 1000px;
@@ -38,16 +41,18 @@ main{
     display: inline-block;
 }
 #playingField{
-    border: 1px solid #eee;
-    box-shadow: 1px 0 5px #ccc;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px 3px #eee;
     cursor: pointer;
     margin-top: 5px;
 
 }
 footer{
     width: 1000px;
-    background-color: darkgrey;
-    border-bottom: 3px solid #555;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px 3px #eee;
     height: 40px;
     margin-top: 5px;
 }
@@ -94,7 +99,7 @@ h4{
     line-height: 0.5;
 }
 .userInputs div {
-    border-bottom: 3px solid #eee;
+
     margin-top: 5px;
     margin-bottom: 5px;
 
