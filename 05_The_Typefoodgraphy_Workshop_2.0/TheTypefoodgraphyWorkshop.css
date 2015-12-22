@@ -1,0 +1,228 @@
+html{
+    
+}
+body{
+    font: 12px Helvetica, arial, sans-serif;
+    width: 1024px;
+    margin: 0 auto;
+    padding: 0;
+}
+header{ 
+    width: 1000px;
+    background-color: #efefef;
+    height: 80px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 10px;
+    font-family: 'Oswald', sans-serif;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px 3px #eee;
+}
+header h1{
+    color: #555;
+    display: inline;
+    font-size: 40px;
+    line-height: 1.8em;
+}
+main{
+    width: 1000px;
+}
+#textInput{
+    font-size: 18px;
+    width: 160px;
+    height: 20px;
+    display: inline-block;
+}
+#playingField{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px 3px #eee;
+    cursor: pointer;
+    margin-top: 5px;
+
+}
+footer{
+    width: 1000px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px 3px #eee;
+    height: 40px;
+    margin-top: 10px;
+    background-color: #efefef;
+}
+.instructions{
+    border-bottom: 3px solid #eee; 
+}
+.instructions h2, button, p{ 
+    margin-bottom: 0;
+}
+button {
+    border-radius: 2px;
+    background-color: #eee;
+}
+button:active,
+button:focus,
+button.active,
+button:focus:active {
+    background-image: none;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+#readMore {
+    float: right;
+}
+#explain {
+    height: 0;
+    overflow: hidden;
+    max-height: 9999px;
+    -webkit-transition: height 1s ease-in-out;
+    -moz-transition: height 1s ease-in-out;
+    -ms-transition: height 1s ease-in-out;
+    -o-transition: height 1s ease-in-out;
+    transition: height 1s ease-in-out;
+    
+    max-width: 800px;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+}
+h2 {
+    font-size: 16px;
+    font-weight:600;
+    color: #555;
+    margin-top: 3px;
+    margin-bottom: 7px;
+    margin-right: 5px;
+    display: inline-block;
+}
+h3{
+    margin-top: 20px;
+}
+h4{
+    margin-bottom: 0;
+    line-height: 0.5;
+}
+.userInputs div {
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+}
+.fontName {
+    margin-left: 10px;
+}
+
+#fontForm {
+    display: inline;
+}
+#fontSize {
+    position: relative;
+    float: right;
+}
+/**
+#fontSizeSlider{
+    width: 730px;
+}
+#fontSizeDisplay{
+    position: relative;
+    bottom: 3px;
+    width: 40px;
+    padding: 3px 5px 3px 5px;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+*/
+#settingsButton {
+    margin-right: 20px;
+}
+#saveButton {
+    padding: 2px 5px 2px 5px;
+    background-color: #eee;
+    border-top: 2px solid #bbb;
+    border-left: 2px solid #bbb;
+    border-bottom: 2px solid #666;
+    border-right: 2px solid #666;
+    font-size: 0.95em;
+    text-decoration: none;
+}
+a, a:visited, a:hover, a:active {
+  color: inherit;
+}
+input {
+    display: inline;
+}
+#message {
+    position: relative;
+    top: -3px;
+    background: red;
+    color: white;
+    padding: 1px 5px;
+    font-weight: bold;
+    border-radius: 2px;
+    display: none;
+	clear: both;
+}
+#pointsDisplay{
+    display: none;
+    font-size: 12px;
+    line-height: 8px;
+}
+#betaLabel{
+    position: relative;
+    float: right;
+}
+.betaMsg {
+    color: crimson;
+}
+@font-face {
+    font-family: Fira_sans;
+    src: url(fonts/FiraSansMedium.woff);
+}
+
+@font-face {
+    font-family: Hussar;
+    src: url(fonts/hussarbd-web.woff);
+}
+@font-face {
+    font-family: Mignone;
+    src: url(fonts/Mignone.ttf);
+}
+@font-face {
+    font-family: Sanchez;
+    src: url(fonts/Sanchezregular.otf);
+}
+@font-face {
+    font-family: Dingsbums Bats;
+    src: url(fonts/DingsbumsBats.ttf);
+}
+@font-face {
+    font-family: Nymphette;
+    src: url(fonts/Nymphette.ttf);
+}
+#Fira{
+    font-family: "Fira_sans", sans-serif;
+}
+#Hussar {
+    font-family: "Hussar";
+}
+#Mignone {
+    font-family: "Mignone";
+}
+#Sanchez {
+    font-family: "Sanchez";
+}
+#Dingbat {
+    font-family: "Dingsbums Bats";
+}
+.Nymphette {
+    font-family: "Nymphette";
+    font-size: 40px;
+    color: #777;
+    margin: 10px;
+}
