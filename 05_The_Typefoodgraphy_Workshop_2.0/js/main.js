@@ -130,64 +130,6 @@ function adaptTextSize(){
     
 }
 
-/*
-function displayPathPoints(){
-    var i, cmd, pointsDisplay, html, shapeNum;
-    var initShapePoint= [];
-    pointsDisplay= document.getElementById('pointsDisplay');
-    html= '<h2>Shapes path points: (Only during the development)</h2><dl>';
-    shapeNum= 0;
-    cmd= snapPath.commands;
-    for(i=0; i< cmd.length; i++){
-        switch(cmd[i].type){
-            case 'M':
-                shapeNum++;
-                cmd[i].x= cmd[i].x.toFixed(4);
-                cmd[i].y= cmd[i].y.toFixed(4);
-                initShapePoint.push(cmd[i].x);
-                initShapePoint.push(cmd[i].y);
-                html+= '<dt><h3>Shape number: ' + shapeNum + '</h3></dt><dd><h4>Initial point:</h4><br>x: '+ 
-                    cmd[i].x + ', y:' + cmd[i].y + '</dd>';
-            break;
-            case 'L':
-                cmd[i].x= cmd[i].x.toFixed(4);
-                cmd[i].y= cmd[i].y.toFixed(4);
-                html+= '<dd><h4>Straight line to:</h4><br>x: ' + 
-                cmd[i].x + ', y:' + cmd[i].y + '</dd>';
-            break;
-            case 'Z':
-                html+= '<dd><h4>Straight line to:</h4><br>x: ' +
-                initShapePoint[0] + ', y:' + initShapePoint[1] + '</dd>';
-                initShapePoint.length= 0;
-            break;
-            case 'C':
-                cmd[i].x= cmd[i].x.toFixed(4);
-                cmd[i].y= cmd[i].y.toFixed(4);
-                cmd[i].x1= cmd[i].x1.toFixed(4);
-                cmd[i].y1= cmd[i].y1.toFixed(4);
-                cmd[i].x2= cmd[i].x2.toFixed(4);
-                cmd[i].y2= cmd[i].y2.toFixed(4);
-                html+= '<dd><h4>Curve to:</h4><br>x: ' + cmd[i].x + ', y: ' + cmd[i].y +
-                ' (Cubic Bézier curve control points: x1: '+ cmd[i].x1 + ', y1: ' + cmd[i].y1 +
-                ' x2: ' + cmd[i].x2 + ', y2: ' + cmd[i].y2 +')</dd>';
-            break;
-            case 'Q':
-                cmd[i].x= cmd[i].x.toFixed(4);
-                cmd[i].y= cmd[i].y.toFixed(4);
-                cmd[i].x1= cmd[i].x1.toFixed(4);
-                cmd[i].y1= cmd[i].y1.toFixed(4);
-                html+= '<dd><h4>Curve to:</h4><br>x: ' + cmd[i].x + ', y: ' + cmd[i].y +
-                ' (Quadratic Bézier curve control point: x1: '+ cmd[i].x1 + ', y1: ' + cmd[i].y1 +')</dd>';  
-            break;
-        }
-    }
-    html += '</dl>';
-    
-    pointsDisplay.innerHTML= html;
-    
-}
-*/
-
 function getQuadraticCurvePath(currentPoint, curve){
     var t, tSqr, oneMinust, oneMinustSqr;
     var curvePath= [];
@@ -343,24 +285,6 @@ function unsnap(){
      snapY= 0;
 }
 
-function resizeText(){
-    var slider= document.getElementById('fontSizeSlider');
-    var fontSizeDisplay= document.getElementById('fontSizeDisplay');
-    var max= slider.getAttribute('max');
-    var min= slider.getAttribute('min');
-    fontSize= slider.value;
-    console.log(fontSize);
-    if(fontSize == max){
-        fontSizeDisplay.innerHTML= 'MAX';
-    }else if(fontSize == min){
-        fontSizeDisplay.innerHTML= 'MIN';
-    }else{
-        fontSizeDisplay.innerHTML= fontSize;
-    }
-
-    renderText();
-}
-
 function onBodyLoad() {
     var body= document.body;
     body.addEventListener('load', initialise(), false);
@@ -408,7 +332,6 @@ function openTypeLoad(fontFileName){
 
 
 function renderText() {
-$(document).ready(function(){
     var snapCtx;
     if (!font) return;
     textToRender = document.getElementById('textInput').value;
@@ -417,7 +340,6 @@ $(document).ready(function(){
     snapCtx = document.getElementById('playingField').getContext('2d');
     snapCtx.clearRect(0, 0, 1000, 300);
     snapPath.draw(snapCtx);
-});
 }
 $(document).ready(function(){
 function downloadCanvasImage(link, canvasId, filename){
