@@ -37,7 +37,10 @@ var curve;
 
 
 enableHighDPICanvas('playingField');
-openTypeLoad(fontFileName);
+
+$(document).ready(function(){
+    openTypeLoad(fontFileName);
+});
 
 function doMouseDown(event) {
     
