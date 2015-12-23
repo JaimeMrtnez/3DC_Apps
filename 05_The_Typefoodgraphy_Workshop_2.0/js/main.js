@@ -21,7 +21,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 
 var font= null;
-var fontSize= 220;
+var fontSize= 120;
 var textToRender= "";
 var baseLineHeight= 230;
 var frameDistance= 25;
@@ -96,16 +96,16 @@ function adaptTextSize(){
     textLength= textToRender.length;
     switch(textLength) {
         case 1:
-            fontSize= 220;
+            fontSize= 200;
         break;
         case 2:
-            fontSize= 220;
+            fontSize= 200;
         break;
         case 3:
-            fontSize= 220;
+            fontSize= 200;
         break;
         case 4:
-            fontSize= 220;
+            fontSize= 200;
         break;
         case 5:
             fontSize= 180;
@@ -120,7 +120,7 @@ function adaptTextSize(){
             fontSize= 120;
         break;
         case 9:
-            fontSize= 100;
+            fontSize= 110;
         break;
         case 10:
             fontSize= 100;
