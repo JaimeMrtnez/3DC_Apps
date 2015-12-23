@@ -37,10 +37,8 @@ var curve;
 
 
 enableHighDPICanvas('playingField');
+openTypeLoad(fontFileName);
 
-$(document).ready(function(){
-    openTypeLoad(fontFileName);
-});
 
 function doMouseDown(event) {
     
@@ -410,6 +408,7 @@ function openTypeLoad(fontFileName){
 
 
 function renderText() {
+$(document).ready(function(){
     var snapCtx;
     if (!font) return;
     textToRender = document.getElementById('textInput').value;
@@ -418,6 +417,7 @@ function renderText() {
     snapCtx = document.getElementById('playingField').getContext('2d');
     snapCtx.clearRect(0, 0, 1000, 300);
     snapPath.draw(snapCtx);
+});
 }
 $(document).ready(function(){
 function downloadCanvasImage(link, canvasId, filename){
