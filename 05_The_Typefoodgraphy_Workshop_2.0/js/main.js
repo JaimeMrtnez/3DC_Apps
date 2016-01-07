@@ -34,13 +34,23 @@ var snapY= 0;
 var fontFileName= 'fonts/FiraSansMedium.woff';
 var currentPoint;
 var curve;
-
+var fullPath= [];
+var extendedFullPath= [];
+var printerPath= [];
+var pathShapesLengths= [];
+var distances= [];
+var extrusions= [];
+var ac_extrusions= [];
+var gcode;
 
 enableHighDPICanvas('playingField');
 openTypeLoad(fontFileName);
 
 
 function doMouseDown(event) {
+    
+    pathShapesLengths= [];
+    fullPath= [];
     
     //Getting canvas object and values
     var canvas= document.getElementById('playingField');
@@ -63,8 +73,8 @@ function doMouseDown(event) {
     //Setting offset coordinates
     canvasXCentered= event.pageX - canvasXOffset;
     canvasYCentered= event.pageY - canvasYOffset;
-    console.log(canvasXCentered);
-    console.log(canvasYCentered);
+    //console.log(canvasXCentered);
+    //console.log(canvasYCentered);
     //Getting arithmetic mean of coordinates to use it in next calculations
     var coordsMaxMean= (canvasW + canvasY)/2;
     //Getting arithmetic sum of coordinates to use it in next calculations
@@ -86,7 +96,20 @@ function doMouseDown(event) {
     snapY= canvasYCentered/1.5;
     
     renderText();
+    canvasToGcode();
+    
+}
+function canvasToGcode(){
     createFullPathArray();
+    pathShapesLengths= storeLengths(fullPath);
+    extendedFullPath= extendFullPath(fullPath);
+    extendedFullPath= offsetAndScale(extendedFullPath);
+    fullPath= contractFullPath(extendedFullPath, pathShapesLengths);
+    distances= calculateDistances(fullPath);
+    extrusions= calculateExtrusions(distances);
+    ac_extrusions= calculateAccumulatedExtrusions(extrusions);
+    gcode= buildGcode();
+    console.log(gcode);
 }
 
 function adaptTextSize(){
@@ -125,9 +148,7 @@ function adaptTextSize(){
         case 10:
             fontSize= 100;
         break;
-
-    }
-    
+    } 
 }
 
 function getQuadraticCurvePath(currentPoint, curve){
@@ -199,7 +220,7 @@ function createFullPathArray(){
     var i, j, k, cmd, currentPathLength; 
     var initShapePoint={};
     var currentPoint={};
-    var fullPath= [];
+    var shapePath= [];
     var curvePath= [];
     cmd= snapPath.commands;
     for(i=0; i< cmd.length; i++){
@@ -214,47 +235,295 @@ function createFullPathArray(){
                 initShapePoint.y= initShapePoint.y.toFixed(4);
                 initShapePoint.y= parseFloat(initShapePoint.y);
                 //Storing values in the fullPath array
-                fullPath.push(initShapePoint.x);
-                fullPath.push(initShapePoint.y);
+                shapePath.push(initShapePoint.x);
+                shapePath.push(initShapePoint.y);
             break;
             case 'L':
                 //Storing values in the fullPath array
-                fullPath.push(parseFloat(cmd[i].x));
-                fullPath.push(parseFloat(cmd[i].y));
-            break;
-            case 'Z':
-                //Using first point data to close the shape.
-                fullPath.push(initShapePoint.x);
-                fullPath.push(initShapePoint.y);
+                shapePath.push(parseFloat(cmd[i].x.toFixed(4)));
+                shapePath.push(parseFloat(cmd[i].y.toFixed(4)));
             break;
             case 'C':
                 //Getting the last point
-                currentPoint.x= fullPath[fullPath.length-2];
-                currentPoint.y= fullPath[fullPath.length-1];
+                currentPoint.x= shapePath[shapePath.length-2];
+                currentPoint.y= shapePath[shapePath.length-1];
                 //Generating cubic bézier curve path
                 curvePath= getCubicCurvePath(currentPoint, cmd[i]);
-                //Saving points in the main array
+                //Saving points in the shape array
                 for(j=0; j< curvePath.length; j++){
-                    fullPath.push(curvePath[j]);
+                    shapePath.push(parseFloat(curvePath[j].toFixed(4)));
                 }
             break;
             case 'Q':
                 //Getting the last point
-                currentPoint.x= fullPath[fullPath.length-2];
-                currentPoint.y= fullPath[fullPath.length-1];
+                currentPoint.x= shapePath[shapePath.length-2];
+                currentPoint.y= shapePath[shapePath.length-1];
                 //Generating quadratic bézier curve path
                 curvePath= getQuadraticCurvePath(currentPoint, cmd[i]);
                 //Saving points in the main array
                 for(k=0; k< curvePath.length; k++){
-                    fullPath.push(curvePath[k]);
-                }
-                
+                    shapePath.push(parseFloat(curvePath[k].toFixed(4)));
+                }   
+            break;
+            case 'Z':
+                //Using first point data to close the shape.
+                shapePath.push(initShapePoint.x);
+                shapePath.push(initShapePoint.y);
+                fullPath.push(shapePath);
+                shapePath= [];
             break;
         }
-    
     }
-    console.log(fullPath);
+    //console.log(fullPath);
+}
+
+function storeLengths(arrayOfArrays){
+    var pathLengths= [];
+    for(var i=0; i< arrayOfArrays.length; i++){
+        pathLengths.push(arrayOfArrays[i].length);
+    }
+    return pathLengths;
+}
+
+function extendFullPath(arrayOfArrays){
+    var extendedArray= [];
+    for(var i=0; i< arrayOfArrays.length; i++){
+        for(var j=0; j<arrayOfArrays[i].length; j++){
+            extendedArray.push(arrayOfArrays[i][j]);
+        }
+    }
+    return extendedArray;
+}
+
+function contractFullPath(path, lengths){
+    var shapes= lengths.length;
+    var rebuiltArray= [];
+    var currentShape;
+    var currentStart= 0;
+    var currentEnd;
     
+    for(var i=0; i< shapes; i++){
+        currentEnd= lengths[i];
+        currentShape= path.splice(currentStart, currentEnd);
+        rebuiltArray[i]= currentShape;
+    }
+    
+    return rebuiltArray;
+}
+
+function calculateDistances(arrayOfArrays){
+    var shapes= arrayOfArrays.length;
+    var distances= [];
+    var i, j, k, l, m;
+    var result;
+    
+    for(i=0; i< shapes; i++){
+        var currentShape= arrayOfArrays[i];
+        //console.log(currentShape);
+        var currentLength= currentShape.length;
+        //console.log(currentLength);
+        distances[i]= [];
+        for(j=0, k=0; j< currentLength-1; j+=2, k++){
+            distances[i][k]= Math.sqrt(Math.pow((currentShape[j+2]-currentShape[j]),2)+
+                             (Math.pow((currentShape[j+3]-currentShape[j+1]),2)));
+            distances[i][k]= parseFloat(distances[i][k].toFixed(4));
+        }
+    }
+    for(l=0; l< shapes; l++){
+        var distance_l_length= distances[l].length-1;
+        distances[l].splice(distance_l_length, 1); 
+    }
+    return distances;
+}
+
+function calculateExtrusions(distances){
+    
+    //Getting user values
+    var nozzle_d= parseFloat(document.getElementById("nozzle_d").value);
+    var material_d= parseFloat(document.getElementById("material_d").value);
+    //Calculating nozzle-material surface ratio
+    var nozzle_s= Math.PI * Math.pow((nozzle_d/2), 2);
+    var material_s= Math.PI * Math.pow((material_d/2), 2);
+    var m_s_ratio= nozzle_s / material_s;
+    
+    var extrusions= [];
+    var shapes= distances.length;
+    
+    for(var i= 0; i< shapes; i++){
+        extrusions[i]= [];
+        var shape= distances[i].length;
+        for(var j= 0; j< shape; j++){
+            extrusions[i][j]= distances[i][j] * m_s_ratio;
+            extrusions[i][j]= parseFloat(extrusions[i][j].toFixed(4));
+        }
+    }
+    return extrusions;
+}
+ function calculateAccumulatedExtrusions(extrusions){
+     
+     var layers= parseInt(document.getElementById("layers").value);
+         console.log(layers + " Layers");
+     var ac_extrusions= [];
+     var shapes= extrusions.length;
+         console.log(shapes + " Shapes");
+     var first_value= extrusions[0].shift();
+         console.log("First value: "+first_value);
+     ac_extrusions.push(first_value);
+     for(var i=0; i< layers; i++){
+         if(i==1){
+             extrusions[0].unshift(first_value);
+         }
+         for(var j=0; j< shapes; j++){
+             var shape= extrusions[j].length;
+             for(var k=0; k< shape; k++){
+                 var ace_length= ac_extrusions.length;
+                 var last_sum= ac_extrusions[ace_length-1];
+                 var result= last_sum + extrusions[j][k];
+                 result= parseFloat(result.toFixed(4));
+                 ac_extrusions.push(result);
+             }
+         }
+         
+         
+     }
+     return ac_extrusions;
+ }
+
+function buildGcode(){
+    //Getting user settings
+    var layers= parseInt(document.getElementById("layers").value);
+    var layer_h= parseFloat(document.getElementById("layer_h").value);
+    var i_layer_h= parseFloat(document.getElementById("i_layer_h").value);
+    var b_pressure= parseFloat(document.getElementById("b_pressure").value);
+    var r_pressure= parseFloat(document.getElementById("r_pressure").value);
+    var feedrate= parseInt(document.getElementById("feedrate").value);
+    var z_travel_h= parseFloat(document.getElementById("z_travel_h").value);
+    var retraction= parseFloat(document.getElementById("retraction").value);
+    var text;
+    var extrusion;
+    var latest_extrusions= [];
+    var currentRetraction;
+    var currentLastExtrusion;
+    var last_index;
+    var travel;
+    var recoveredExtrusion;
+    var currentTravelHeight;
+    var currentReleasePressure;
+    
+    //Calculating layers height values
+    var total_height= i_layer_h + ((layers-1) * layer_h);
+    var ac_layer_h;
+    ac_layer_h= i_layer_h;
+    
+    //Initial instructions block
+    text= "G28\r\nG92 E0\r\nG1 X" + fullPath[0][0] +" Y" + fullPath[0][1] + 
+        " Z"+ i_layer_h +" F" + feedrate + "\r\nG1 E" + b_pressure + " F200\r\nG92 E0\r\nG1 F" 
+        + feedrate + "\r\n";
+    
+    var shapes= fullPath.length;
+    for(var i= 0; i< layers; i++){
+        if(i>0){
+        text+= "G1 Z"+ ac_layer_h +"\r\n";
+        }
+        for(var j= 0; j< shapes; j++){
+            text+= "G1 X"+fullPath[j][0]+" Y"+fullPath[j][1]+"\r\n";
+            //text+= "G1 Z"+ ac_layer_h +"\r\n";
+            recoveredExtrusion= parseFloat((currentRetraction + retraction).toFixed(4));
+            if(recoveredExtrusion){
+                text+= "G1 E"+ recoveredExtrusion +" F200\r\n";
+                text+= "G1 Z"+ ac_layer_h +"\r\n";
+            }
+            var shape= fullPath[j].length;
+            for(var k= 2; k< shape; k= k+2){
+                text+= "G1 X"+fullPath[j][k]+" Y"+fullPath[j][k+1];
+                last_index= shape-2;
+                if(k==0){
+                    text+= "\r\n";
+                } else if(k==last_index){
+                    extrusion= ac_extrusions.shift();
+                    text+= " E"+ extrusion +"\r\n"; 
+                    latest_extrusions.push(extrusion);
+                } else if(k!=0 && k!= last_index){
+                    extrusion= ac_extrusions.shift();
+                    text+= " E"+ extrusion +"\r\n";
+                }
+            }
+            currentLastExtrusion= latest_extrusions.shift();
+            currentRetraction= parseFloat((currentLastExtrusion - retraction).toFixed(4));
+            if(j< shapes){
+                text+= "G1 E"+ currentRetraction +" F200\r\n";
+            }
+            currentTravelHeight= ac_layer_h + z_travel_h;
+            if(j< shapes-1){
+                text+= "G1 Z"+ currentTravelHeight +" F"+ feedrate + "\r\n";
+            }
+        }
+        
+        ac_layer_h+= layer_h;
+    }
+    currentReleasePressure= parseFloat((currentLastExtrusion - r_pressure).toFixed(4));
+    text+= "G1 E"+ currentReleasePressure +" F200\r\nG1 F"+ feedrate +"\r\nG28\r\nM84"
+    return text;
+}
+
+function offsetAndScale(array){
+    //Generating Arrays to store points coordinates
+    var x_s= [];
+    var y_s= [];
+    var coords= [];
+    
+    //Separating xs and ys in different arrays for the treatment
+    for(i=0; i< array.length; i= i+2){
+        x_s.push(array[i]);
+    }
+    for(i=1; i< array.length; i= i+2){
+        y_s.push(array[i]);
+    }
+    
+    //Finding maximum and minimum values.
+    var xMax= Math.max.apply(Math, x_s);
+    var xMin= Math.min.apply(Math, x_s);
+    var yMax= Math.max.apply(Math, y_s);
+    var yMin= Math.min.apply(Math, y_s);
+    
+    //Calculating Offset
+    var xOffset= xMin + ((xMax - yMin)/2);
+    var yOffset= yMin + ((yMax - yMin)/2);
+    
+    //Calculating scale parameters
+    var xDiff= xMax - xMin;
+    var yDiff= yMax - yMin;
+    var maxDiff= Math.max(xDiff, yDiff);
+    var xScale= 100/maxDiff;
+    var yScale= (yDiff/maxDiff) * xScale;
+    
+    //Converting x's
+    for(i= 0; i< x_s.length; i++){
+        x_s[i]= x_s[i] - xOffset;
+    }
+    for(i= 0; i< x_s.length; i++){
+        x_s[i]= x_s[i] * xScale;
+    }
+    
+    //Converting y's
+    for(i= 0; i< y_s.length; i++){
+        y_s[i]= y_s[i] - yOffset;
+    }
+    for(i= 0; i< y_s.length; i++){
+        y_s[i]= y_s[i] * yScale;
+    }
+    
+    //Rebuilding array with new values
+    for(i=0; i< (x_s.length) ; i++){
+        coords.push(x_s[i]);
+        coords.push(y_s[i]);
+    }
+    
+    //Rounding and parsing numbers
+    for (i=0; i< coords.length;i++){
+        coords[i]= parseFloat(coords[i].toFixed(4));
+    }
+    return coords;
 }
 
 function changeBaseFont(){
@@ -310,7 +579,7 @@ function initialise() {
 function onFontLoaded(font) {
     var i;
     window.font = font;
-    amount = Math.min(100, font.glyphs.length);
+    amount = Math.min(200, font.glyphs.length);
     for (i = 0; i < amount; i++) {
         glyph = font.glyphs.get(i);
     }
@@ -348,17 +617,27 @@ function downloadCanvasImage(link, canvasId, filename){
 }
 });
 
-//'Dowload File' button behavior
-$(document).ready(function(){
+
+function saveGcodeFile(){
+    var filename = document.getElementById("textFilename").value;
+    //Creating text node
+    var blob = new Blob([gcode], {type: "text/plain;charset=utf-8"});
+    //Saving file
+    saveAs(blob, filename +".gcode");
+}
+function savePngFile(){
     var myCanvas= document.getElementById('playingField');
     var myCtx= myCanvas.getContext('2d');
     var fileName= document.getElementById('textFilename').value;
     fileName= fileName + '.png';
     var link= document.getElementById('saveButton');
-    link.addEventListener('click', function(){
-        link.href= myCanvas.toDataURL();
-        link.download= fileName;
-    }, false); 
+    link.href= myCanvas.toDataURL();
+    link.download= fileName;
+}
+
+//'Dowload File' button behavior
+$(document).ready(function(){
+    var link= document.getElementById('saveButton');
     link.addEventListener('mousedown', function(){
         link.style.borderTopColor= '#666';
         link.style.borderLeftColor= '#666';
@@ -373,8 +652,6 @@ $(document).ready(function(){
     }, false); 
     
 });
-
-
 
 
 //Slides in/out the introduction paragraph
@@ -395,6 +672,25 @@ $(document).ready(function(){
         }
     });
 });
+//Slides in/out the printer settings
+$(document).ready(function(){
+    $('#settingsButton').click(function() {
+        var height = $("#printerSettings").height();
+        if( height > 0 ) {
+            $('#printerSettings').css('height','0');
+        } else {
+            var clone = $('#printerSettings').clone()
+                    .css({'position':'absolute','visibility':'hidden','height':'auto'})
+                    .addClass('slideClone2')
+                    .appendTo('body');
+        
+            var newHeight = $(".slideClone2").height();
+            $(".slideClone2").remove();
+            $('#printerSettings').css('height',newHeight + 'px');
+        }
+    });
+});
+
 
 
 
