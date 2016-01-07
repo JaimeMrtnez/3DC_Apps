@@ -58,10 +58,7 @@ footer{
 .instructions h2, button, p{ 
     margin-bottom: 0;
 }
-button {
-    border-radius: 2px;
-    background-color: #eee;
-}
+
 button:active,
 button:focus,
 button.active,
@@ -71,27 +68,39 @@ button:focus:active {
     -webkit-box-shadow: none;
     box-shadow: none;
 }
+/*
 #readMore {
     float: right;
 }
-#explain {
+*/
+#explain,
+#printerSettings {
     height: 0;
     overflow: hidden;
     max-height: 9999px;
-    -webkit-transition: height 1s ease-in-out;
-    -moz-transition: height 1s ease-in-out;
-    -ms-transition: height 1s ease-in-out;
-    -o-transition: height 1s ease-in-out;
-    transition: height 1s ease-in-out;
+    -webkit-transition: height 0.5s ease-in-out;
+    -moz-transition: height 0.5s ease-in-out;
+    -ms-transition: height 0.5s ease-in-out;
+    -o-transition: height 0.5s ease-in-out;
+    transition: height 0.5s ease-in-out;
     
-    max-width: 800px;
+    max-width: 1000px;
     margin-left: 10px;
     margin-top: 5px;
     margin-bottom: 5px;
     font-size: 14px;
     font-weight: 400;
-    line-height: 18px;
+    line-height: 25px;
 }
+#printerSettings {
+    text-align: right;
+    -webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;
+    border-top: 3px solid #eee;
+    margin-right: 110px;
+}
+
 h2 {
     font-size: 16px;
     font-weight:600;
@@ -125,23 +134,12 @@ h4{
     position: relative;
     float: right;
 }
-/**
-#fontSizeSlider{
-    width: 730px;
-}
-#fontSizeDisplay{
-    position: relative;
-    bottom: 3px;
-    width: 40px;
-    padding: 3px 5px 3px 5px;
-    font-size: 1.2em;
-    font-weight: 600;
-}
-*/
+
 #settingsButton {
     margin-right: 20px;
 }
-#saveButton {
+#saveButton,
+button {
     padding: 2px 5px 2px 5px;
     background-color: #eee;
     border-top: 2px solid #bbb;
@@ -219,6 +217,9 @@ input {
 }
 #Dingbat {
     font-family: "Dingsbums Bats";
+}
+#Nymphette {
+    font-family: "Nymphette";
 }
 .Nymphette {
     font-family: "Nymphette";
