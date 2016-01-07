@@ -3,6 +3,7 @@
 <head>
     <title>The Typefoodgraphy Workshop</title>
     <meta name="description" content="An application to generate typographic designs ready for 3D printing with food.">
+    <meta namw="author" content="Jaime Martínez Mejías">
     <meta charset="utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery-2.1.4.js"></script>
@@ -36,7 +37,7 @@ When you're happy with the result you can change the printer settings and save a
         <div class="userInputs">
             <div>
                 <h2>1. Type your text:</h2>
-                <input type="text" maxlength="10" id="textInput" value="Click me!" autofocus id="textField" onkeyup="adaptTextSize(); unsnap(); renderText()">
+                <input type="text" maxlength="10" id="textInput" value="Click me!" autofocus id="textField" onkeyup="adaptTextSize(); unsnap(); renderText(); canvasToGcode()">
             </div>
             <div>
                 <h2>2. Choose a base font:</h2>
@@ -45,7 +46,9 @@ When you're happy with the result you can change the printer settings and save a
                     <input type="radio" class="fontName" name="fontName" value="fonts/hussarbd-web.woff"><span id="Hussar">Hussar</span>
                     <input type="radio" class="fontName" name="fontName" value="fonts/Mignone.ttf"><span id="Mignone">Mignone</span>
                     <input type="radio" class="fontName" name="fontName" value="fonts/Sanchezregular.otf"><span id="Sanchez">Sanchez</span>
-                    <input type="radio" class="fontName" name="fontName" value="fonts/DingsbumsBats.ttf"><span id="Dingbat">Dingsbums Bats</span>
+                    <input type="radio" class="fontName" name="fontName" value="fonts/DingsbumsBats.ttf">Dingsbums Bats (<span id="Dingbat">ABC</span>)
+<!--                    <input type="radio" class="fontName" name="fontName" value="fonts/Nymphette.ttf">Nymphette (<span id="Nymphette">po</span>)
+-->
                 </form>
             </div>
             <h2>3. Click on different points of the canvas:</h2>         
@@ -57,9 +60,20 @@ When you're happy with the result you can change the printer settings and save a
                 <h2>5. Save your file:</h2>
                 <button id="settingsButton" class="button">Printer Settings</button>
                 <input type="text" id="textFilename" value="filename">.gcode & .png
-                <a id="saveButton">Download File</a> <span class="betaMsg">(Printer Settings and .gcode file not available in Beta version)</span>
+                <a id="saveButton" onclick="saveGcodeFile(); savePngFile()">Download File</a> 
                 <div id="printerSettings">
-                    
+                    <div>
+                    Initial Layer Heigth: <input type="text" id="i_layer_h" value="1.5" ></input><br>
+                    Layer Height: <input type="text" id="layer_h" value="1" ></input><br>
+                    Number of layers: <input type="text" id="layers" value="2" ></input><br>
+                    Material diameter: <input type="text" id="material_d" value="40.5" ></input><br>
+                    Nozzle diameter: <input type="text" id="nozzle_d" value="1.5" ></input><br>
+                    Feedrate: <input type="text" id="feedrate" value="3000" ></input><br>
+                    Initial build up pressure: <input type="text" id="b_pressure" value="2.5" ></input><br>
+                    Release pressure: <input type="text" id="r_pressure" value="1.5" ></input><br>
+                    Retraction: <input type="text" id="retraction" value="1" ></input><br>
+                    Z travel height: <input type="text" id="z_travel_h" value="1.5" ></input><br>
+                    </div>
                 </div>
             </div>
         </div>
