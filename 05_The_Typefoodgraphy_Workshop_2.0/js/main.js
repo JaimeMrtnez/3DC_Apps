@@ -36,7 +36,6 @@ var currentPoint;
 var curve;
 var fullPath= [];
 var extendedFullPath= [];
-var printerPath= [];
 var pathShapesLengths= [];
 var distances= [];
 var extrusions= [];
@@ -60,8 +59,8 @@ function doMouseDown(event) {
     var innerWith= window.innerWidth;
     //Getting sliding paragraph height.
     var expHeight= document.getElementById('explain').style.height;
-    //Setting coordinates from window to canvas position and from left corner reference to the center of the canvas
     
+    //Setting coordinates from window to canvas position and from left corner reference to the center of the canvas
     canvasXOffset= 500 + ((innerWith-1000)/2);
     canvasXOffset= Math.round(canvasXOffset);
     var text= document.getElementById('readMore').textContent;
@@ -73,8 +72,7 @@ function doMouseDown(event) {
     //Setting offset coordinates
     canvasXCentered= event.pageX - canvasXOffset;
     canvasYCentered= event.pageY - canvasYOffset;
-    //console.log(canvasXCentered);
-    //console.log(canvasYCentered);
+
     //Getting arithmetic mean of coordinates to use it in next calculations
     var coordsMaxMean= (canvasW + canvasY)/2;
     //Getting arithmetic sum of coordinates to use it in next calculations
@@ -95,12 +93,14 @@ function doMouseDown(event) {
     snapX= canvasXCentered/5;
     snapY= canvasYCentered/1.5;
     
-    renderText();
     canvasToGcode();
     
 }
+
 function canvasToGcode(){
+    renderText();
     createFullPathArray();
+    
     pathShapesLengths= storeLengths(fullPath);
     extendedFullPath= extendFullPath(fullPath);
     extendedFullPath= offsetAndScale(extendedFullPath);
@@ -110,6 +110,14 @@ function canvasToGcode(){
     ac_extrusions= calculateAccumulatedExtrusions(extrusions);
     gcode= buildGcode();
     console.log(gcode);
+    
+    fullPath= [];
+    extendedFullPath= [];
+    pathShapesLengths= [];
+    distances= [];
+    extrusions= [];
+    ac_extrusions= [];
+    snapPath= null;
 }
 
 function adaptTextSize(){
@@ -274,7 +282,6 @@ function createFullPathArray(){
             break;
         }
     }
-    //console.log(fullPath);
 }
 
 function storeLengths(arrayOfArrays){
@@ -362,12 +369,9 @@ function calculateExtrusions(distances){
  function calculateAccumulatedExtrusions(extrusions){
      
      var layers= parseInt(document.getElementById("layers").value);
-         console.log(layers + " Layers");
      var ac_extrusions= [];
      var shapes= extrusions.length;
-         console.log(shapes + " Shapes");
      var first_value= extrusions[0].shift();
-         console.log("First value: "+first_value);
      ac_extrusions.push(first_value);
      for(var i=0; i< layers; i++){
          if(i==1){
@@ -431,6 +435,8 @@ function buildGcode(){
             recoveredExtrusion= parseFloat((currentRetraction + retraction).toFixed(4));
             if(recoveredExtrusion){
                 text+= "G1 E"+ recoveredExtrusion +" F200\r\n";
+            }
+            if(extrusion){
                 text+= "G1 Z"+ ac_layer_h +"\r\n";
             }
             var shape= fullPath[j].length;
@@ -450,11 +456,9 @@ function buildGcode(){
             }
             currentLastExtrusion= latest_extrusions.shift();
             currentRetraction= parseFloat((currentLastExtrusion - retraction).toFixed(4));
-            if(j< shapes){
-                text+= "G1 E"+ currentRetraction +" F200\r\n";
-            }
+            text+= "G1 E"+ currentRetraction +" F200\r\n";
             currentTravelHeight= ac_layer_h + z_travel_h;
-            if(j< shapes-1){
+            if(j<shapes-1){
                 text+= "G1 Z"+ currentTravelHeight +" F"+ feedrate + "\r\n";
             }
         }
@@ -610,6 +614,7 @@ function renderText() {
     snapCtx.clearRect(0, 0, 1000, 300);
     snapPath.draw(snapCtx);
 }
+
 $(document).ready(function(){
 function downloadCanvasImage(link, canvasId, filename){
     link.href= document.getElementById(canvasId).toDataURL();
