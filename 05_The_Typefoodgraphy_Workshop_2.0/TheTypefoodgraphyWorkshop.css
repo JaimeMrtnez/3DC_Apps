@@ -98,7 +98,6 @@ button:focus:active {
     -moz-column-count: 3; /* Firefox */
     column-count: 3;
     border-top: 3px solid #eee;
-    margin-right: 110px;
 }
 
 h2 {
