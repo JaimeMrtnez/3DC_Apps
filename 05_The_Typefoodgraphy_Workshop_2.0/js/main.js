@@ -25,7 +25,7 @@ var fontSize= 120;
 var textToRender= "";
 var baseLineHeight= 230;
 var frameDistance= 25;
-var previewPath= null;;
+var previewPath= null;
 var snapPath= null;
 var snapStrength= 0;
 var snapDistance= 1;
@@ -100,7 +100,7 @@ function doMouseDown(event) {
 function canvasToGcode(){
     renderText();
     createFullPathArray();
-    
+    reverseFullPath(fullPath);
     pathShapesLengths= storeLengths(fullPath);
     extendedFullPath= extendFullPath(fullPath);
     extendedFullPath= offsetAndScale(extendedFullPath);
@@ -120,6 +120,13 @@ function canvasToGcode(){
     snapPath= null;
 }
 
+function reverseFullPath(path){
+    path.reverse();
+    for(var i=0; i< path.length; i++){
+        path[i].reverse();
+    }
+}
+
 function adaptTextSize(){
     var textLength;
     
@@ -127,25 +134,25 @@ function adaptTextSize(){
     textLength= textToRender.length;
     switch(textLength) {
         case 1:
-            fontSize= 200;
-        break;
-        case 2:
-            fontSize= 200;
-        break;
-        case 3:
-            fontSize= 200;
-        break;
-        case 4:
-            fontSize= 200;
-        break;
-        case 5:
             fontSize= 180;
         break;
-        case 6:
+        case 2:
+            fontSize= 180;
+        break;
+        case 3:
+            fontSize= 180;
+        break;
+        case 4:
             fontSize= 160;
         break;
-        case 7:
+        case 5:
+            fontSize= 150;
+        break;
+        case 6:
             fontSize= 140;
+        break;
+        case 7:
+            fontSize= 130;
         break;
         case 8:
             fontSize= 120;
@@ -164,7 +171,7 @@ function getQuadraticCurvePath(currentPoint, curve){
     var curvePath= [];
     var curvePoint= {};
     
-    for(t= 0.0; t< 1.0; t+= 0.02){
+    for(t= 0.0; t< 1.0; t+= 0.05){
         /*** Previous calculations ***/
         tSqr= Math.pow(t, 2);
         oneMinust= (1.0 - t);
@@ -205,7 +212,7 @@ function getCubicCurvePath(currentPoint, curve){
     //console.log(cx, bx, ax, cy, by, ay);
     
     //Curve point calculations
-    for(t= 0.0; t< 1.0; t+= 0.02){
+    for(t= 0.0; t< 1.0; t+= 0.05){
         tSqr= Math.pow(t, 2);
         tSqr= parseFloat(tSqr.toFixed(4));
         tCub= Math.pow(t, 3);
@@ -421,18 +428,20 @@ function buildGcode(){
     
     //Initial instructions block
     text= "G28\r\nG92 E0\r\nG1 X" + fullPath[0][0] +" Y" + fullPath[0][1] + 
-        " Z"+ i_layer_h +" F" + feedrate + "\r\nG1 E" + b_pressure + " F200\r\nG92 E0\r\nG1 F" 
-        + feedrate + "\r\n";
+        " Z"+ i_layer_h +" F" + feedrate + "\r\n" + 
+        "G1 E" + b_pressure + " F200\r\n" + 
+        "G92 E0\r\nG1 F" + 
+        feedrate + "\r\n";
     
     var shapes= fullPath.length;
     for(var i= 0; i< layers; i++){
         if(i>0){
-        text+= "G1 Z"+ ac_layer_h +"\r\n";
+        text+= "G1 Z"+ ac_layer_h +" F"+ feedrate +"\r\n";
         }
         for(var j= 0; j< shapes; j++){
-            text+= "G1 X"+fullPath[j][0]+" Y"+fullPath[j][1]+"\r\n";
-            //text+= "G1 Z"+ ac_layer_h +"\r\n";
             recoveredExtrusion= parseFloat((currentRetraction + retraction).toFixed(4));
+            text+= "G1 X"+fullPath[j][0]+" Y"+fullPath[j][1]+"\r\n";
+            
             if(recoveredExtrusion){
                 text+= "G1 E"+ recoveredExtrusion +" F200\r\n";
             }
@@ -441,32 +450,40 @@ function buildGcode(){
             }
             var shape= fullPath[j].length;
             for(var k= 2; k< shape; k= k+2){
+            //if(){
                 text+= "G1 X"+fullPath[j][k]+" Y"+fullPath[j][k+1];
                 last_index= shape-2;
-                if(k==0){
-                    text+= "\r\n";
-                } else if(k==last_index){
+                
+                if(k== last_index){
                     extrusion= ac_extrusions.shift();
                     text+= " E"+ extrusion +"\r\n"; 
                     latest_extrusions.push(extrusion);
-                } else if(k!=0 && k!= last_index){
+                }else if(k== 2 && j!= 0){
+                    extrusion= ac_extrusions.shift();
+                    text+= " E"+ extrusion + " F"+ feedrate +"\r\n";  
+                } else {
                     extrusion= ac_extrusions.shift();
                     text+= " E"+ extrusion +"\r\n";
                 }
+            //}
             }
             currentLastExtrusion= latest_extrusions.shift();
             currentRetraction= parseFloat((currentLastExtrusion - retraction).toFixed(4));
             text+= "G1 E"+ currentRetraction +" F200\r\n";
             currentTravelHeight= ac_layer_h + z_travel_h;
-            if(j<shapes-1){
+            
+            if(j< shapes-1){
                 text+= "G1 Z"+ currentTravelHeight +" F"+ feedrate + "\r\n";
             }
         }
-        
         ac_layer_h+= layer_h;
     }
     currentReleasePressure= parseFloat((currentLastExtrusion - r_pressure).toFixed(4));
-    text+= "G1 E"+ currentReleasePressure +" F200\r\nG1 F"+ feedrate +"\r\nG28\r\nM84"
+    
+    text+= "G1 E"+ currentReleasePressure +" F200\r\n" + 
+           "G1 F"+ feedrate +"\r\n" + 
+           "G28\r\nM84"
+    
     return text;
 }
 
@@ -592,28 +609,7 @@ function onFontLoaded(font) {
 }
 
 
-function openTypeLoad(fontFileName){
-    opentype.load(fontFileName, function(err, font) {
-    var amount, glyph, ctx, x, y, fontSize;
-    if (err) {
-        showErrorMessage(err.toString());
-        return;
-    }
-    onFontLoaded(font);
-});
-}
 
-
-function renderText() {
-    var snapCtx;
-    if (!font) return;
-    textToRender = document.getElementById('textInput').value;
-    snapPath = font.getPath(textToRender, frameDistance, baseLineHeight, fontSize, {kerning: true});
-    doSnap(snapPath);
-    snapCtx = document.getElementById('playingField').getContext('2d');
-    snapCtx.clearRect(0, 0, 1000, 300);
-    snapPath.draw(snapCtx);
-}
 
 $(document).ready(function(){
 function downloadCanvasImage(link, canvasId, filename){
@@ -718,6 +714,28 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+function openTypeLoad(fontFileName){
+    opentype.load(fontFileName, function(err, font) {
+    var amount, glyph, ctx, x, y, fontSize;
+    if (err) {
+        showErrorMessage(err.toString());
+        return;
+    }
+    onFontLoaded(font);
+});
+}
+
+
+function renderText() {
+    var snapCtx;
+    if (!font) return;
+    textToRender = document.getElementById('textInput').value;
+    snapPath = font.getPath(textToRender, frameDistance, baseLineHeight, fontSize, {kerning: true});
+    doSnap(snapPath);
+    snapCtx = document.getElementById('playingField').getContext('2d');
+    snapCtx.clearRect(0, 0, 1000, 300);
+    snapPath.draw(snapCtx);
+}
 
 
 function snap(value, distance, strength) {
