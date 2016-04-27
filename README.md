@@ -18,3 +18,9 @@ Thanks to Luis Rodríguez and Jason Mosbrucker for their effort and patience.
 
 ## Project: Save Path.
     Random Shape and G-code File Saver working together.
+
+## Project: Print Path (formally 'Random Shapes').
+    This mini app is ready for print random generated shapes with your 3D food printer.
+
+## Project: The Typefoodgraphy Workshop.
+    Simple app to generate typographic designs to be printed by a 3D food printer.
