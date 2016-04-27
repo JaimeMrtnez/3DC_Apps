@@ -171,7 +171,7 @@ function getQuadraticCurvePath(currentPoint, curve){
     var curvePath= [];
     var curvePoint= {};
     
-    for(t= 0.0; t< 1.0; t+= 0.05){
+    for(t= 0.0; t< 1.0; t+= 0.1){
         /*** Previous calculations ***/
         tSqr= Math.pow(t, 2);
         oneMinust= (1.0 - t);
@@ -212,7 +212,7 @@ function getCubicCurvePath(currentPoint, curve){
     //console.log(cx, bx, ax, cy, by, ay);
     
     //Curve point calculations
-    for(t= 0.0; t< 1.0; t+= 0.05){
+    for(t= 0.0; t< 1.0; t+= 0.1){
         tSqr= Math.pow(t, 2);
         tSqr= parseFloat(tSqr.toFixed(4));
         tCub= Math.pow(t, 3);
@@ -231,7 +231,7 @@ function getCubicCurvePath(currentPoint, curve){
 
 //This function treats and stores in an array all the points of the path.
 function createFullPathArray(){
-    //console.log(snapPath);
+    console.log(snapPath);
     var i, j, k, cmd, currentPathLength; 
     var initShapePoint={};
     var currentPoint={};
@@ -440,13 +440,13 @@ function buildGcode(){
         }
         for(var j= 0; j< shapes; j++){
             recoveredExtrusion= parseFloat((currentRetraction + retraction).toFixed(4));
-            text+= "G1 X"+fullPath[j][0]+" Y"+fullPath[j][1]+"\r\n";
+            text+= "G1 X"+fullPath[j][0]+" Y"+fullPath[j][1]+" F"+ feedrate +"\r\n";
             
             if(recoveredExtrusion){
                 text+= "G1 E"+ recoveredExtrusion +" F200\r\n";
             }
             if(extrusion){
-                text+= "G1 Z"+ ac_layer_h +"\r\n";
+                text+= "G1 Z"+ ac_layer_h +" F"+ feedrate + "\r\n";
             }
             var shape= fullPath[j].length;
             for(var k= 2; k< shape; k= k+2){
@@ -731,6 +731,9 @@ function renderText() {
     if (!font) return;
     textToRender = document.getElementById('textInput').value;
     snapPath = font.getPath(textToRender, frameDistance, baseLineHeight, fontSize, {kerning: true});
+    snapPath.fill= "hsla(0, 0%, 0%, 0)";
+    snapPath.stroke= "darkgrey";
+    snapPath.strokeWidth= "3";
     doSnap(snapPath);
     snapCtx = document.getElementById('playingField').getContext('2d');
     snapCtx.clearRect(0, 0, 1000, 300);
