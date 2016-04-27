@@ -23,7 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 var font= null;
 var fontSize=280;
 var textToRender= "";
-var baseLineHeight= 300;
+var baseLineHeight= 270;
 var frameDistance= 20;
 var previewPath= null;;
 var snapPath= null;
@@ -37,34 +37,6 @@ var curve;
 
 enableHighDPICanvas('playingField');
 openTypeLoad(fontFileName);
-
-function unsnap(){
-     snapStrength= 0;
-     snapDistance= 1;
-     snapX= 0;
-     snapY= 0;
-}
-
-function resizeText(){
-    var slider= document.getElementById('fontSizeSlider');
-    var fontSizeDisplay= document.getElementById('fontSizeDisplay');
-    var max= slider.getAttribute('max');
-    var min= slider.getAttribute('min');
-    fontSize= slider.value;
-    console.log(fontSize);
-    if(fontSize == max){
-        fontSizeDisplay.innerHTML= 'MAX';
-    }else if(fontSize == min){
-        fontSizeDisplay.innerHTML= 'MIN';
-    }else{
-        fontSizeDisplay.innerHTML= fontSize;
-    }
-
-    renderText();
-    displayPathPoints();
-}
-
-
 
 function doMouseDown(event) {
     
@@ -414,6 +386,32 @@ function changeButtonLabel(){
 
 }
 
+function unsnap(){
+     snapStrength= 0;
+     snapDistance= 1;
+     snapX= 0;
+     snapY= 0;
+}
+
+function resizeText(){
+    var slider= document.getElementById('fontSizeSlider');
+    var fontSizeDisplay= document.getElementById('fontSizeDisplay');
+    var max= slider.getAttribute('max');
+    var min= slider.getAttribute('min');
+    fontSize= slider.value;
+    console.log(fontSize);
+    if(fontSize == max){
+        fontSizeDisplay.innerHTML= 'MAX';
+    }else if(fontSize == min){
+        fontSizeDisplay.innerHTML= 'MIN';
+    }else{
+        fontSizeDisplay.innerHTML= fontSize;
+    }
+
+    renderText();
+    displayPathPoints();
+}
+
 function onBodyLoad() {
     var body= document.body;
     body.addEventListener('load', initialise(), false);
@@ -468,7 +466,7 @@ function renderText() {
     snapPath = font.getPath(textToRender, frameDistance, baseLineHeight, fontSize, {kerning: true});
     doSnap(snapPath);
     snapCtx = document.getElementById('playingField').getContext('2d');
-    snapCtx.clearRect(0, 0, 1000, 400);
+    snapCtx.clearRect(0, 0, 1000, 300);
     snapPath.draw(snapCtx);
 }
 

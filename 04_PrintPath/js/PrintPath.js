@@ -149,8 +149,7 @@ function getAndProcessText(){
     //Rounding to 4 decimals
     for (i= 0; i< pointsArray.length; i++){
         pointsArray[i]= parseFloat(pointsArray[i]);
-        pointsArray[i]= pointsArray[i].toFixed(4);
-        pointsArray[i]= parseFloat(pointsArray[i]);
+        pointsArray[i]= parseFloat(pointsArray[i].toFixed(4));
     }
     
     //Recalculating points positions
@@ -200,8 +199,7 @@ function getAndProcessText(){
         extrusion[i]= m_s_ratio * distance[i];
             
             //Rounding values
-            extrusion[i]= extrusion[i].toFixed(4);
-            extrusion[i]= parseFloat(extrusion[i]);
+            extrusion[i]= parseFloat(extrusion[i].toFixed(4));
     }
     
     //Storing total extrusion of each layer
@@ -211,8 +209,7 @@ function getAndProcessText(){
     }
     
         //Rounding values
-        total_layer_extrusion= total_layer_extrusion.toFixed(4);
-        total_layer_extrusion= parseFloat(total_layer_extrusion);
+        total_layer_extrusion= parseFloat(total_layer_extrusion.toFixed(4));
     
     console.log(extrusion);
     console.log(total_layer_extrusion);

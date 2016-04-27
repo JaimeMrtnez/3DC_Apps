@@ -1,6 +1,6 @@
 //Shape limits options:
 var minPoints= 3;
-var maxPoints= 8;
+var maxPoints= 12;
 var minRad= document.getElementById("myCanvas").width/10;
 var maxRad= document.getElementById("myCanvas").width/5;
             
@@ -43,8 +43,8 @@ function setPoints(center, maxRad, points) {
        
     }
     //Randomly raffles if path is smoothed. Uncomment for random shape smoothing.
-    //var draw= Math.random();
-    //if (draw<0.5){path.smooth();}
+    var draw= Math.random();
+    if (draw<0.5){path.smooth();}
     return path;
     
 }
