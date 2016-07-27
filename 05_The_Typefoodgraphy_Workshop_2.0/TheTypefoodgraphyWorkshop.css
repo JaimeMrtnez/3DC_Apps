@@ -3,60 +3,152 @@ html{
 }
 body{
     font: 12px Helvetica, arial, sans-serif;
-    width: 1000px;
+    background: url(images/kitchen_pattern.svg);
+    background-size: 600px;
+    background-color: dimgrey;
+    height: 100%;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0;
 }
 header{ 
-    width: 1000px;
-    background-color: #efefef;
-    height: 80px;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 10px;
-    font-family: 'Oswald', sans-serif;
+    min-height:150px;
+    max-width: 1000px;
+    min-width: 600px;
+    padding: 10px;
+    margin: 0 auto;
+}
+#info {
+    background: url(images/info_logo.svg) no-repeat center;
+    height: 65px;
+    width: 65px;
+    float: left;
+    margin-top: 20px;
+    margin-left: 70px;
+}
+
+#pop {
+    padding: 10px 40px 40px 15px;
+}
+.popover {
+    min-width: 380px;
+    background-color: rgba(0,0,0,0);
+    border: 2px solid white;
+}
+.popover-title{
     text-align: center;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0px 0px 3px 3px #eee;
+    font-size: 16pt;
+    background-color: rgba(255,255,255, 0.2);
+    color: white;
 }
-header h1{
-    color: #555;
-    display: inline;
-    font-size: 40px;
-    line-height: 1.8em;
+.popover-content {
+    background-color: rgba(204, 235, 255, 0.7);
+    color: black;
+    font-size: 12pt;
+    font-weight: 500;
+    text-align: center;
 }
+.arrow {}
+#logo {
+    height:150px;
+    margin: 0 33% 0 33%;
+    background: url(images/Logo.svg) no-repeat center;
+        
+    }
+
 main{
     width: 1000px;
 }
-#textInput{
-    font-size: 18px;
-    width: 160px;
-    height: 20px;
-    display: inline-block;
-}
 #playingField{
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0px 0px 3px 3px #eee;
     cursor: pointer;
     margin-top: 5px;
+    margin-bottom: 30px;
+}
+#textInput{
+    font-size: 18px;
+    color: white;
+    min-width: 160px;
+    min-height: 20px;
+    display: block;
+    padding: 3px;
+    border: 2px solid white;
+    margin: 0 auto;
+    background-color: rgba(0,0,0,0);
+    text-align: center;
+}
+h2 {
+    font-size: 18px;
+    font-weight: 400;
+    color: #ccebff;
+    margin-top: 3px;
+    margin-bottom: 7px;
+    margin-right: 5px;
+    display: block;
+}
+
+#printerSettings {
+    height: 0;
+    overflow: hidden;
+    max-height: 9999px;
+    -webkit-transition: height 0.5s ease-in-out;
+    -moz-transition: height 0.5s ease-in-out;
+    -ms-transition: height 0.5s ease-in-out;
+    -o-transition: height 0.5s ease-in-out;
+    transition: height 0.5s ease-in-out;
+    max-width: 705px;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 11pt;
+    font-weight: 300;
+    line-height: 25px;
+    margin-top: 15px;
+}
+#printerSettings>div {
+    text-align: right;
+    -webkit-column-count: 2; /* Chrome, Safari, Opera */
+    -moz-column-count: 2; /* Firefox */
+    column-count: 2;
+    color: white;
+}
+#printerSettings>div>input{
+    background-color: rgba(0,0,0,0);
+    text-align: right;
+    padding-right: 5px;
+}
+
+.userInputs{
+    max-width: 800px;
+    margin: 0 auto;
+}
+.userInputs div {
+    text-align: center;
+    margin-bottom: 20px;
 
 }
-footer{
-    width: 1000px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0px 0px 3px 3px #eee;
-    height: 40px;
+.fontName {
+    margin-left: 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+#fontForm {
+    display: inline;
+    color: whitesmoke;
+    font-size: 15pt;
+}
+
+#settingsButton {
+    min-width: 425px;
     margin-top: 10px;
-    background-color: #efefef;
 }
-.instructions{
-    border-bottom: 3px solid #eee; 
-}
-.instructions h2, button, p{ 
-    margin-bottom: 0;
+button {
+    padding: 5px;
+    background-color: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid white;
+    font-size: 12pt;
+    text-decoration: none;
 }
 
 button:active,
@@ -68,89 +160,30 @@ button:focus:active {
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-/*
-#readMore {
-    float: right;
-}
-*/
-#explain,
-#printerSettings {
-    height: 0;
-    overflow: hidden;
-    max-height: 9999px;
-    -webkit-transition: height 0.5s ease-in-out;
-    -moz-transition: height 0.5s ease-in-out;
-    -ms-transition: height 0.5s ease-in-out;
-    -o-transition: height 0.5s ease-in-out;
-    transition: height 0.5s ease-in-out;
-    
-    max-width: 1000px;
-    margin-left: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 25px;
-}
-#printerSettings {
-    text-align: right;
-    -webkit-column-count: 3; /* Chrome, Safari, Opera */
-    -moz-column-count: 3; /* Firefox */
-    column-count: 3;
-    border-top: 3px solid #eee;
+
+button:hover {
+    background-color: rgba(204, 235, 255, 0.5);
+    border-color: rgb(204, 235, 255);
 }
 
-h2 {
-    font-size: 16px;
-    font-weight:600;
-    color: #555;
-    margin-top: 3px;
-    margin-bottom: 7px;
-    margin-right: 5px;
-    display: inline-block;
+#textFilename {
+    padding: 5px;
+    background-color: rgba(255,255,255,0);
+    color: white;
+    border: 2px solid white;
+    font-size: 12pt;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    text-align: center;
+    min-width: 425px;
 }
-h3{
-    margin-top: 20px;
-}
-h4{
-    margin-bottom: 0;
-    line-height: 0.5;
-}
-.userInputs div {
-
-    margin-top: 5px;
-    margin-bottom: 5px;
-
-}
-.fontName {
-    margin-left: 10px;
+.saveBtn{
+    min-width: 210px;
+    margin-right
 }
 
-#fontForm {
-    display: inline;
-}
-#fontSize {
-    position: relative;
-    float: right;
-}
 
-#settingsButton {
-    margin-right: 20px;
-}
-#saveButton,
-button {
-    padding: 2px 5px 2px 5px;
-    background-color: #eee;
-    border-top: 2px solid #bbb;
-    border-left: 2px solid #bbb;
-    border-bottom: 2px solid #666;
-    border-right: 2px solid #666;
-    font-size: 0.95em;
-    text-decoration: none;
-}
-a, a:visited, a:hover, a:active {
-  color: inherit;
-}
 input {
     display: inline;
 }
@@ -170,12 +203,44 @@ input {
     font-size: 12px;
     line-height: 8px;
 }
-#betaLabel{
-    position: relative;
-    float: right;
+
+h2, #fontForm>span {
+    cursor: default;
 }
-.betaMsg {
-    color: crimson;
+#savePng {
+    text-decoration: none;
+    color: white;
+}
+footer{
+    margin-top: 30px;
+    color: lightgrey;
+}
+footer>div {
+    margin: 0 auto;
+    text-align: center;
+}
+footer>div>a{
+    color: lightgray;
+}
+footer>div>a:hover {
+    color: #ccebff;
+    text-decoration: none;
+}
+#creditsBtn:hover {
+    color: #ccebff;
+    cursor: pointer;
+}
+#credits{
+    height: 0;
+    overflow: hidden;
+    max-height: 9999px;
+    -webkit-transition: height 0.5s ease-in-out;
+    -moz-transition: height 0.5s ease-in-out;
+    -ms-transition: height 0.5s ease-in-out;
+    -o-transition: height 0.5s ease-in-out;
+    transition: height 0.5s ease-in-out;
+    max-width: 705px;
+    margin: 0 auto;
 }
 @font-face {
     font-family: Fira_sans;
@@ -183,46 +248,42 @@ input {
 }
 
 @font-face {
-    font-family: Hussar;
-    src: url(fonts/hussarbd-web.woff);
+    font-family: Mechanical;
+    src: url(fonts/MechanicalExt.otf);
 }
 @font-face {
-    font-family: Mignone;
-    src: url(fonts/Mignone.ttf);
+    font-family: Kaushan;
+    src: url(fonts/KaushanScript.otf);
 }
 @font-face {
     font-family: Sanchez;
     src: url(fonts/Sanchezregular.otf);
 }
 @font-face {
-    font-family: Dingsbums Bats;
-    src: url(fonts/DingsbumsBats.ttf);
+    font-family: Entypo;
+    src: url(fonts/Entypo.otf);
 }
 @font-face {
     font-family: Nymphette;
     src: url(fonts/Nymphette.ttf);
 }
 #Fira{
-    font-family: "Fira_sans", sans-serif;
+    font-family: "Fira_sans";
+    margin-left: 5px;
 }
-#Hussar {
-    font-family: "Hussar";
+#Mechanical {
+    font-family: "Mechanical";
+    margin-left: 5px;
 }
-#Mignone {
-    font-family: "Mignone";
+#Kaushan {
+    font-family: "Kaushan";
+    margin-left: 5px;
 }
 #Sanchez {
     font-family: "Sanchez";
+    margin-left: 5px;
 }
-#Dingbat {
-    font-family: "Dingsbums Bats";
-}
-#Nymphette {
-    font-family: "Nymphette";
-}
-.Nymphette {
-    font-family: "Nymphette";
-    font-size: 40px;
-    color: #777;
-    margin: 10px;
+#Entypo {
+    font-family: sans-serif;
+    margin-left: 5px;
 }
