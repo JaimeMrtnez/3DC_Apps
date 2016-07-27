@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Typefoodgraphy Workshop</title>
+    <meta name="description" content="An application to generate typographic designs ready for 3D food printing.">
+    <meta name="author" content="Jaime Martínez Mejías">
+    <meta name="keywords" content="food print, 3D, 3D food print, 3DFP, typography design, generative design, 3 Digital Cooks">
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="js/opentype.js"></script>
+    <script type="text/javascript" src="js/Blob.js"></script>
+    <script type="text/javascript" src="js/FileSaver.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="TheTypefoodgraphyWorkshop.css">
+    
+</head>
+<body onload="initialise()">
+    <header>
+        <div class="btn" id="info"><a href="#" id="pop" title="Welcome to<br> The Typefoodgraphy Workshop!" data-toggle="popover" data-placement="bottom" data-trigger="focus" data-content="With this mini app, you can create your own typographic design for your 3D food printer in a quick and easy way.<br>First, type in the text you want. The maximum length is 10 characters. If you need longer text, simply generate more files. Then, try to manipulate it by changing the font, or the funniest, click around the big text to see how it deforms and takes on a new personality. When you're happy with the result you can change the printer settings and save a PNG image and a G-Code file ready to work with your food printer.<br> Have fun and Bon Appetit!"></a></div>
+        <div id="logo" onclick="locationReload()"></div>   
+    </header>
+    <main>
+        <div id="message"></div>
+        <canvas id="playingField" width="1000" height="400">Your Browser doesn't support canvas</canvas>
+        <div class="userInputs">
+            <div>
+                <h2>Type your text</h2>
+                <input type="text" maxlength="10" id="textInput" value="Click me!" autofocus id="textField" onkeyup="adaptTextSize(); unsnap(); renderText(); canvasToGcode()">
+            </div>
+            <div>
+                <h2>Choose a font</h2>
+                <form id="fontForm" onchange="adaptTextSize(); changeBaseFont(); canvasToGcode() ">
+                    <input type="radio" class="fontName" name="fontName" value="fonts/FiraSansMedium.woff" checked><span id="Fira">Fira Sans</span>
+                    <input type="radio" class="fontName" name="fontName" value="fonts/MechanicalExt.otf"><span id="Mechanical">Mechanical</span>
+                    <input type="radio" class="fontName" name="fontName" value="fonts/KaushanScript.otf"><span id="Kaushan">Kaushan Script</span>
+                    <input type="radio" class="fontName" name="fontName" value="fonts/Sanchezregular.otf"><span id="Sanchez">Sanchez</span>
+                    <input type="radio" class="fontName" name="fontName" value="fonts/Entypo.otf"><span id="Entypo">Entypo (icons)</span>
+                    <input type="radio" class="fontName" name="fontName" value="fonts/food.otf"><span id="Entypo">Food Icons</span>
+                </form>
+            </div>
+            <div>
+                <h2>Click on different points around the text to deform it!</h2>
+            </div>
+            <div>
+                <h2>When you're happy with the result, set the printing parameters and save your files</h2>
+                <button id="settingsButton" class="button">Printer Settings</button>
+            </div>
+                <form id="printerSettings">
+                    <div>
+                    Initial Layer Heigth: <input type="text" id="i_layer_h" value="1.5" onchange="canvasToGcode()"><br>
+                    Layer Height: <input type="text" id="layer_h" value="1" onchange="canvasToGcode()"><br>
+                    Number of layers: <input type="text" id="layers" value="2" onchange="canvasToGcode()"><br>
+                    Material diameter: <input type="text" id="material_d" value="40.5" onchange="canvasToGcode()"><br>
+                    Nozzle diameter: <input type="text" id="nozzle_d" value="1.5" onchange="canvasToGcode()"><br>
+                    Feedrate: <input type="text" id="feedrate" value="3000" onchange="canvasToGcode()"><br>
+                    Build up pressure: <input type="text" id="b_pressure" value="2.5" onchange="canvasToGcode()"><br>
+                    Release pressure: <input type="text" id="r_pressure" value="1.5" onchange="canvasToGcode()"><br>
+                    Retraction: <input type="text" id="retraction" value="1" onchange="canvasToGcode()"><br>
+                    Z travel height: <input type="text" id="z_travel_h" value="1.5" onchange="canvasToGcode()"><br>
+                    </div>
+                </form>
+            
+            <div>
+                <input type="text" id="textFilename" value="Filename"><span id="fileExt"></span>
+                <button class="saveBtn"><a href="#" class="saveBtn" id="savePng" download="myfilename.jpeg">Download Image</a></button>
+                <button class="saveBtn" id="saveGcode" onclick="canvasToGcode(); saveGcodeFile()">Download G-Code</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div>Jaime Martínez for 3digitalcooks.com</div>
+        <div>2015 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a></div>
+        <div id="creditsBtn">Credits</div>
+        <div id="credits">
+            Background icons by <a href="http://www.freepik.com/">Freepik, <a href="http://www.flaticon.com/authors/madebyoliver">Madebyoliver</a></a><br>
+            All fonts in this site are free Opentype<br>
+        </div>
+    </footer>
+</body>
+</html>

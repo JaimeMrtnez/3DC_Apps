@@ -1,0 +1,289 @@
+html{
+    
+}
+body{
+    font: 12px Helvetica, arial, sans-serif;
+    background: url(images/kitchen_pattern.svg);
+    background-size: 600px;
+    background-color: dimgrey;
+    height: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0;
+}
+header{ 
+    min-height:150px;
+    max-width: 1000px;
+    min-width: 600px;
+    padding: 10px;
+    margin: 0 auto;
+}
+#info {
+    background: url(images/info_logo.svg) no-repeat center;
+    height: 65px;
+    width: 65px;
+    float: left;
+    margin-top: 20px;
+    margin-left: 70px;
+}
+
+#pop {
+    padding: 10px 40px 40px 15px;
+}
+.popover {
+    min-width: 380px;
+    background-color: rgba(0,0,0,0);
+    border: 2px solid white;
+}
+.popover-title{
+    text-align: center;
+    font-size: 16pt;
+    background-color: rgba(255,255,255, 0.2);
+    color: white;
+}
+.popover-content {
+    background-color: rgba(204, 235, 255, 0.7);
+    color: black;
+    font-size: 12pt;
+    font-weight: 500;
+    text-align: center;
+}
+.arrow {}
+#logo {
+    height:150px;
+    margin: 0 33% 0 33%;
+    background: url(images/Logo.svg) no-repeat center;
+        
+    }
+
+main{
+    width: 1000px;
+}
+#playingField{
+    cursor: pointer;
+    margin-top: 5px;
+    margin-bottom: 30px;
+}
+#textInput{
+    font-size: 18px;
+    color: white;
+    min-width: 160px;
+    min-height: 20px;
+    display: block;
+    padding: 3px;
+    border: 2px solid white;
+    margin: 0 auto;
+    background-color: rgba(0,0,0,0);
+    text-align: center;
+}
+h2 {
+    font-size: 18px;
+    font-weight: 400;
+    color: #ccebff;
+    margin-top: 3px;
+    margin-bottom: 7px;
+    margin-right: 5px;
+    display: block;
+}
+
+#printerSettings {
+    height: 0;
+    overflow: hidden;
+    max-height: 9999px;
+    -webkit-transition: height 0.5s ease-in-out;
+    -moz-transition: height 0.5s ease-in-out;
+    -ms-transition: height 0.5s ease-in-out;
+    -o-transition: height 0.5s ease-in-out;
+    transition: height 0.5s ease-in-out;
+    max-width: 705px;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 11pt;
+    font-weight: 300;
+    line-height: 25px;
+    margin-top: 15px;
+}
+#printerSettings>div {
+    text-align: right;
+    -webkit-column-count: 2; /* Chrome, Safari, Opera */
+    -moz-column-count: 2; /* Firefox */
+    column-count: 2;
+    color: white;
+}
+#printerSettings>div>input{
+    background-color: rgba(0,0,0,0);
+    text-align: right;
+    padding-right: 5px;
+}
+
+.userInputs{
+    max-width: 800px;
+    margin: 0 auto;
+}
+.userInputs div {
+    text-align: center;
+    margin-bottom: 20px;
+
+}
+.fontName {
+    margin-left: 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+#fontForm {
+    display: inline;
+    color: whitesmoke;
+    font-size: 15pt;
+}
+
+#settingsButton {
+    min-width: 425px;
+    margin-top: 10px;
+}
+button {
+    padding: 5px;
+    background-color: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid white;
+    font-size: 12pt;
+    text-decoration: none;
+}
+
+button:active,
+button:focus,
+button.active,
+button:focus:active {
+    background-image: none;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+button:hover {
+    background-color: rgba(204, 235, 255, 0.5);
+    border-color: rgb(204, 235, 255);
+}
+
+#textFilename {
+    padding: 5px;
+    background-color: rgba(255,255,255,0);
+    color: white;
+    border: 2px solid white;
+    font-size: 12pt;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    text-align: center;
+    min-width: 425px;
+}
+.saveBtn{
+    min-width: 210px;
+    margin-right
+}
+
+
+input {
+    display: inline;
+}
+#message {
+    position: relative;
+    top: -3px;
+    background: red;
+    color: white;
+    padding: 1px 5px;
+    font-weight: bold;
+    border-radius: 2px;
+    display: none;
+	clear: both;
+}
+#pointsDisplay{
+    display: none;
+    font-size: 12px;
+    line-height: 8px;
+}
+
+h2, #fontForm>span {
+    cursor: default;
+}
+#savePng {
+    text-decoration: none;
+    color: white;
+}
+footer{
+    margin-top: 30px;
+    color: lightgrey;
+}
+footer>div {
+    margin: 0 auto;
+    text-align: center;
+}
+footer>div>a{
+    color: lightgray;
+}
+footer>div>a:hover {
+    color: #ccebff;
+    text-decoration: none;
+}
+#creditsBtn:hover {
+    color: #ccebff;
+    cursor: pointer;
+}
+#credits{
+    height: 0;
+    overflow: hidden;
+    max-height: 9999px;
+    -webkit-transition: height 0.5s ease-in-out;
+    -moz-transition: height 0.5s ease-in-out;
+    -ms-transition: height 0.5s ease-in-out;
+    -o-transition: height 0.5s ease-in-out;
+    transition: height 0.5s ease-in-out;
+    max-width: 705px;
+    margin: 0 auto;
+}
+@font-face {
+    font-family: Fira_sans;
+    src: url(fonts/FiraSansMedium.woff);
+}
+
+@font-face {
+    font-family: Mechanical;
+    src: url(fonts/MechanicalExt.otf);
+}
+@font-face {
+    font-family: Kaushan;
+    src: url(fonts/KaushanScript.otf);
+}
+@font-face {
+    font-family: Sanchez;
+    src: url(fonts/Sanchezregular.otf);
+}
+@font-face {
+    font-family: Entypo;
+    src: url(fonts/Entypo.otf);
+}
+@font-face {
+    font-family: Nymphette;
+    src: url(fonts/Nymphette.ttf);
+}
+#Fira{
+    font-family: "Fira_sans";
+    margin-left: 5px;
+}
+#Mechanical {
+    font-family: "Mechanical";
+    margin-left: 5px;
+}
+#Kaushan {
+    font-family: "Kaushan";
+    margin-left: 5px;
+}
+#Sanchez {
+    font-family: "Sanchez";
+    margin-left: 5px;
+}
+#Entypo {
+    font-family: sans-serif;
+    margin-left: 5px;
+}
