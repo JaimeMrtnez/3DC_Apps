@@ -27,7 +27,7 @@ var font= null;
 var fontSize= 160;
 var textToRender= "";
 var baseLineHeight= 300;
-var frameDistance= 150;
+var frameDistance= 155;
 var previewPath= null;
 var snapPath= null;
 var snapStrength= 0;
@@ -129,58 +129,48 @@ function adaptTextSize(){
     var textLength;
     textToRender= document.getElementById('textInput').value;
     textLength= textToRender.length;
+    
     switch(textLength) {
         case 1:
             fontSize= 275;
             frameDistance= 400;
         break;
         case 2:
-            fontSize= 265;
+            fontSize= 260;
             frameDistance= 320;
         break;
         case 3:
-            fontSize= 255;
+            fontSize= 245;
             frameDistance= 280;
         break;
         case 4:
-            fontSize= 240;
+            fontSize= 230;
             frameDistance= 200;
         break;
         case 5:
-            fontSize= 225;
+            fontSize= 215;
             frameDistance= 175;
         break;
         case 6:
-            fontSize= 210;
+            fontSize= 200;
             frameDistance= 150;
         break;
         case 7:
-            fontSize= 190;
-            frameDistance= 120;
+            fontSize= 185;
+            frameDistance= 110;
         break;
         case 8:
-            fontSize= 175;
-            frameDistance= 105;
-        break;
-        case 9:
             fontSize= 160;
             frameDistance= 105;
         break;
-        case 10:
+        case 9:
             fontSize= 145;
             frameDistance= 100;
         break;
-    }
-    var m= /\m+/g;
-    if(textToRender.match(m)){
-        fontSize= fontSize -40;
-        frameDistance= frameDistance -40;
-    }
-    var i= /\i{2}/g;
-    var l= /\l{2}/g;
-    if(textToRender.match(i) || textToRender.match(l)){
-        fontSize= fontSize + 30;
-        frameDistance= frameDistance + 20;
+        case 10:
+            fontSize= 130;
+            frameDistance= 90;
+        break;
     }
     
     var fontForm= document.getElementById('fontForm');
@@ -190,33 +180,58 @@ function adaptTextSize(){
             fontSelected= fontForm[i].value;
         }
     }
-    var textLength= document.getElementById("textInput").value.length;
     
-    if(fontSelected == "fonts/MechanicalExt.otf") {
-        frameDistance= frameDistance - 50;
-    }else if(fontSelected == "fonts/KaushanScript.otf") {
-        frameDistance= frameDistance +30;
-    }else if(fontSelected == "fonts/Entypo.otf") {
-        fontSize= fontSize +30;
-        frameDistance= frameDistance -60;
-    }else if(fontSelected == "fonts/Sanchezregular.otf") {
-        frameDistance= frameDistance -50;
-    }else if(fontSelected == "fonts/food.otf") {
-        frameDistance= frameDistance -25;
-        fontSize= fontSize -20;
+    switch (fontSelected){
+        case "fonts/FiraSansMedium.woff":
+            frameDistance= frameDistance;
+            fontsize= fontSize;
+            break;
+        case "fonts/MechanicalExt.otf": 
+            frameDistance= frameDistance -70;
+            fontsize= fontSize -50;
+            break;
+        case "fonts/KaushanScript.otf":
+            frameDistance= frameDistance;
+            fontsize= fontSize;
+            break;
+        case "fonts/Sanchezregular.otf":
+            frameDistance= frameDistance;
+            fontsize= fontSize;
+            break;
+        case "fonts/Entypo.otf":
+            frameDistance= frameDistance;
+            fontsize= fontSize;
+            break;
+        case "fonts/food.otf":
+            frameDistance= frameDistance -110;
+            fontsize= fontSize -65;
+            break;
+        default:
+            break;
     }
+    
+    var m= /\m{2}/g;
+    if(textToRender.match(m)){
+        fontSize= fontSize -30;
+        frameDistance= frameDistance -90;
+    }
+    var i= /\i{3}/g;
+    var l= /\l{3}/g;
+    if(textToRender.match(i) || textToRender.match(l)){
+        fontSize= fontSize +30;
+        frameDistance= frameDistance +60;
+    }
+    
+    
     if((fontSelected == "fonts/Entypo.otf") && textLength == 1) {
         fontSize= fontSize +150;
         frameDistance= frameDistance +35;
         console.log("catch!!");
-    }
-    if((fontSelected == "fonts/food.otf") && textLength == 1) {
+    } else if((fontSelected == "fonts/food.otf") && textLength == 1) {
         fontSize= fontSize +20;
         frameDistance= frameDistance +25;
         console.log("catch!!");
     }
-    console.log(fontSelected);
-    console.log(textLength);
 }
 
 function getQuadraticCurvePath(currentPoint, curve){
